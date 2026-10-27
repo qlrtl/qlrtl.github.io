@@ -175,6 +175,13 @@
     #fieldsvg .node.capped { cursor: not-allowed; opacity: .55; }
     #fieldsvg .node.blocked:hover .dot, #fieldsvg .node.capped:hover .dot { stroke: var(--faint); }
     .placeholder { color: var(--faint); font-style: italic; }
+    .judg { color: var(--pen); margin-right: .12em; font-weight: 700; }
+    .certainty { display: flex; gap: 10px; align-items: baseline; margin: 2px 0 12px; max-width: 60ch;
+      font-family: var(--ui); font-size: .8rem; line-height: 1.45; color: var(--muted); }
+    .certainty[hidden] { display: none; }
+    .cert-mark { flex: none; min-width: 1.6em; text-align: center; font-family: var(--display); font-weight: 700;
+      font-size: .95rem; color: var(--pen); background: var(--pen-soft); border-radius: 4px; padding: 0 4px; }
+    .cert-text { color: var(--ink); font-weight: 500; }
     .exnum[hidden] { display: none; }
     .ask { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 2px 0 12px;
       font-family: var(--ui); font-size: .86rem; color: var(--muted); }
@@ -301,13 +308,14 @@
       </div>
 
       <div class="utterance" aria-live="polite"><span class="exnum" id="exnum">(1c)</span><span id="utt"></span></div>
+      <p class="certainty" id="certainty" hidden><span class="cert-mark"></span><span><span class="cert-text"></span> <span class="cert-why">A ? marks a sentence a linguist would call questionable. Combined social cues don’t simply add up: one can mute or redirect another, so the more qualities you stack, the less any single wording can be trusted.</span></span></p>
       <div class="ask" id="ask" hidden>
         <span><span id="ask-combo"></span>: how would you say it?</span>
         <a id="ask-link" href="#">Suggest a wording</a>
       </div>
       <p class="prop">Propositional content, unchanged: <code>request(hearer, pass(salt))</code></p>
 
-      <svg id="fieldsvg" viewBox="0 0 640 330" role="group" aria-label="Indexical field. Each quality is a button; select up to two to build a wording.">
+      <svg id="fieldsvg" viewBox="0 0 640 330" role="group" aria-label="Indexical field. Each quality is a button; select up to four to build a wording.">
         <g id="edges" aria-hidden="true"></g><g id="nodes"></g>
       </svg>
       <div class="field-foot">
@@ -538,7 +546,9 @@
      The indexical field
      - Presets (Plain, Hedged, Circumlocutory) show which qualities a wording
        calls up. Choosing a preset clears any node selection.
-     - Selecting nodes builds a wording instead: up to two at once.
+     - Selecting nodes builds a wording instead: up to four at once.
+       One or two qualities use hand-written wordings; three or four are
+       composed from each quality's typical devices and marked ? or ??.
        Selecting a node switches the figure out of preset mode.
      - Incompatible pairs gray each other out; deselecting restores them.
      - Every wording keeps the same proposition: request(hearer, pass(salt)).
@@ -546,7 +556,7 @@
 
   // Where to send suggested wordings (a pre-filled email; see README).
   var SUGGEST_TO = 'vixyryanrivera@gmail.com';
-  var MAX = 2;
+  var MAX = 4;   // beyond four, a single request can't carry every quality audibly
 
   // Qualities and positions (viewBox 640 x 330). Order = keyboard tab order.
   var order = ['direct','efficient','brusque','familiar','casual','friendly','exasperated',
@@ -689,6 +699,92 @@
     'distant+formal':          'Excuse me, might I trouble you for the salt?'
   };
 
+  /* ---------- Composing wordings for three or four qualities ----------
+     Mood first (bare noun, imperative, or question), then the strongest
+     question frame, then one characteristic device per remaining quality.
+     The result is an open question if it contains an open pair, leaves a
+     selected quality unexpressed, or stacks more than three devices. */
+  // Question frames, strongest first; the highest-ranked selected quality sets the frame.
+  var FRAMES = [
+    ['formal',      'might I ask you to pass the salt'],
+    ['deferential', 'would you mind passing the salt'],
+    ['careful',     'could I possibly have the salt'],
+    ['polite',      'could you pass the salt'],
+    ['considerate', 'could you pass the salt'],
+    ['friendly',    'could you pass the salt'],
+    ['casual',      'can you grab the salt']
+  ];
+  var MAX_EXTRAS = 3;   // devices beyond the frame before a wording stops sounding like speech
+
+  function compose(sel) {
+    var has = {}; sel.forEach(function (q) { has[q] = true; });
+    // 1. An open pair inside the set means the set has no convincing wording either.
+    for (var i = 0; i < sel.length; i++) for (var j = i + 1; j < sel.length; j++)
+      if (pairs[key(sel[i], sel[j])] === null) return { open: true };
+
+    var said = {};            // which selected qualities the wording actually expresses
+    var parts = { opener: '', pre: '', frame: '', timing: '', cond: '', please: false, address: '', thanks: false };
+
+    // 2. Mood: terse qualities give a bare noun, direct gives an imperative, otherwise a question.
+    var mood = (has.efficient || has.brusque) ? 'bare' : has.direct ? 'imp' : 'q';
+    if (mood === 'bare') {
+      parts.frame = (has.formal || has.polite || has.deferential) ? 'the salt' : 'salt';
+      if (has.efficient) said.efficient = true;
+      if (has.brusque) said.brusque = true;
+      if (has.formal) { parts.cond = 'if you please'; said.formal = true; }
+      else if (has.careful) { parts.cond = 'if you’re done with it'; said.careful = true; }
+    } else if (mood === 'imp') {
+      parts.frame = 'pass the salt'; said.direct = true;
+      if (has.formal) { parts.frame = 'kindly pass the salt'; said.formal = true; }
+    } else {
+      parts.frame = 'could you pass the salt';
+      for (var f = 0; f < FRAMES.length; f++) if (has[FRAMES[f][0]]) { parts.frame = FRAMES[f][1]; said[FRAMES[f][0]] = true; break; }
+    }
+    var elevated = has.formal || has.deferential || has.careful;
+
+    // 3. Each remaining quality adds its characteristic device.
+    if (has.distant) { parts.opener = 'excuse me'; said.distant = true; }
+    else if ((has.casual || has.friendly) && !elevated) {
+      parts.opener = 'hey'; if (has.casual) said.casual = true; if (has.friendly) said.friendly = true;
+    }
+    if (has.careful && !said.careful && mood === 'q') { parts.pre = 'sorry to bother you, but'; said.careful = true; }
+    if (has.careful && parts.frame.indexOf('possibly') >= 0 && sel.length > 2) { parts.pre = 'sorry to bother you, but'; }
+    if (has.considerate && mood !== 'bare') { parts.timing = 'when you get a chance'; said.considerate = true; }
+    if (has.deferential && !said.deferential) {
+      if (mood === 'q') { parts.cond = parts.cond || 'if it isn’t too much bother'; said.deferential = true; }
+      else if (!has.familiar) { parts.address = 'sir'; said.deferential = true; }
+    }
+    if (has.polite) { if (parts.cond !== 'if you please') parts.please = true; said.polite = true; }
+    if (has.familiar) { parts.address = 'hon'; said.familiar = true; }
+    if (has.friendly) { parts.thanks = true; said.friendly = true; }
+    if (has.exasperated) said.exasperated = true;   // carried by falling punctuation below
+
+    // 4. Every selected quality must be audible in the result.
+    for (var s = 0; s < sel.length; s++) if (!said[sel[s]]) return { open: true };
+    // 5. Too much stacked onto one request stops sounding like speech.
+    var extras = ['opener','pre','timing','cond','address'].filter(function (k) { return parts[k]; }).length
+               + (parts.please ? 1 : 0) + (parts.thanks ? 1 : 0);
+    if (extras > MAX_EXTRAS || (mood === 'bare' && extras > 2)) return { open: true };
+
+    // 6. Assemble.
+    var out = '';
+    if (parts.opener) out += parts.opener + ', ';
+    if (parts.pre) out += parts.pre + ' ';
+    out += parts.frame;
+    if (parts.timing) out += ' ' + parts.timing;
+    if (parts.cond) out += ', ' + parts.cond;
+    if (parts.please && !has.exasperated) out += ', please';
+    if (parts.address) out += ', ' + parts.address;
+    var question = mood === 'q' || (mood === 'bare' && has.efficient && !has.brusque);
+    if (parts.cond === 'if you please') question = false;
+    out += (has.exasperated || has.brusque || !question) ? '.' : '?';
+    // Exasperation: falling intonation plus a separate, flat closer.
+    if (has.exasperated && parts.thanks) out += ' Thaaanks.';
+    else if (has.exasperated && !/please/i.test(out)) out += ' Please.';
+    else if (parts.thanks) out += ' Thanks!';
+    return { text: out.charAt(0).toUpperCase() + out.slice(1) };
+  }
+
   // Presets: unchanged from before.
   var registers = {
     plain:  { num: '(1a)', html: 'Pass the salt.',
@@ -753,6 +849,7 @@
   var utt = document.getElementById('utt'), exnum = document.getElementById('exnum');
   var hint = document.getElementById('hint'), ask = document.getElementById('ask');
   var askLink = document.getElementById('ask-link'), clearBtn = document.getElementById('clear');
+  var certainty = document.getElementById('certainty');
   var radios = document.querySelectorAll('input[name="reg"]');
   var selected = [];   // build mode selection
   var mode = 'preset';
@@ -782,8 +879,8 @@
     paintEdges(state);
     exnum.textContent = r.num; exnum.hidden = false;
     utt.innerHTML = r.html;
-    ask.hidden = true; clearBtn.hidden = true;
-    hint.textContent = 'Or select up to two qualities in the field to build your own wording.';
+    ask.hidden = true; clearBtn.hidden = true; certainty.hidden = true;
+    hint.textContent = 'Or select up to four qualities in the field to build your own wording.';
   }
 
   function render() {
@@ -799,7 +896,7 @@
       var g = nodeEls[k], cls = 'node', label = k, disabled = false;
       if (state[k]) { cls += ' on'; label += ', selected'; }
       else if (blocked[k]) { cls += ' blocked'; disabled = true; label += ', unavailable: clashes with ' + blocked[k]; }
-      else if (full) { cls += ' capped'; disabled = true; label += ', unavailable: two qualities already selected'; }
+      else if (full) { cls += ' capped'; disabled = true; label += ', unavailable: four qualities already selected'; }
       g.setAttribute('class', cls);
       g.setAttribute('aria-pressed', state[k] ? 'true' : 'false');
       if (disabled) g.setAttribute('aria-disabled', 'true'); else g.removeAttribute('aria-disabled');
@@ -811,18 +908,29 @@
     if (selected.length === 0) {
       exnum.hidden = true;
       utt.innerHTML = '<span class="placeholder">Select a quality in the field below.</span>';
-      ask.hidden = true;
-      hint.textContent = 'Select up to two qualities. Grayed-out ones clash with your choice.';
+      ask.hidden = true; certainty.hidden = true;
+      hint.textContent = 'Select up to four qualities. Grayed-out ones clash with your choice.';
       return;
     }
 
     var names = order.filter(function (k) { return state[k]; });
-    var text = names.length === 1 ? single[names[0]] : pairs[key(names[0], names[1])];
+    var text, composed = names.length >= 3;
+    if (names.length === 1) text = single[names[0]];
+    else if (names.length === 2) text = pairs[key(names[0], names[1])];
+    else { var c = compose(names); text = c.open ? null : c.text; }
     exnum.hidden = false;
     exnum.textContent = '(2)';
+    var mark = names.length === 3 ? '?' : names.length >= 4 ? '??' : '';
+    certainty.hidden = !composed;
+    if (composed) {
+      certainty.querySelector('.cert-mark').textContent = mark;
+      certainty.querySelector('.cert-text').textContent = names.length === 3
+        ? 'Speculative. Composed from each quality’s typical devices, not hand-written.'
+        : 'Highly speculative. Real requests rarely signal four qualities at once.';
+    }
 
     if (text) {
-      utt.innerHTML = esc(text);
+      utt.innerHTML = (mark ? '<span class="judg" aria-label="questionable">' + mark + '</span>' : '') + esc(text);
       ask.hidden = true;
     } else {
       utt.innerHTML = '<span class="placeholder">No wording yet.</span>';
@@ -833,9 +941,11 @@
         '&body=' + encodeURIComponent('Request: pass the salt\nQualities: ' + combo + '\n\nMy wording:\n\n');
       ask.hidden = false;
     }
-    hint.textContent = names.length === 1
-      ? names[0] + ' alone. Add one more quality, or choose a preset above.'
-      : names.join(' + ') + '. Deselect one to try another pair.';
+    hint.textContent = names.length >= MAX
+      ? names.join(' + ') + '. That’s the maximum; deselect one to try another combination.'
+      : names.length === 1
+        ? names[0] + ' alone. Add more qualities, or choose a preset above.'
+        : names.join(' + ') + '. Add another, or deselect one.';
   }
 
   function toggle(k) {

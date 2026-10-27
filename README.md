@@ -18,5 +18,6 @@ The wordings, clashing pairs and open questions all live in the `<script>` near 
 - `single`: the wording for each quality on its own
 - `pairs`: the wording for each pair; `null` marks an open question that visitors can answer
 - `incompatible`: pairs that gray each other out
+- `compose()` and `FRAMES`: the rules that build wordings for three or four qualities. The sentence's mood is fixed first (bare noun, imperative or question), then the strongest question frame, then one typical device per remaining quality. A combination becomes an open question if it contains an open pair, leaves a selected quality unexpressed, or stacks more than three devices. Composed wordings are marked ? (three qualities) or ?? (four).
 
 Visitor suggestions for open questions arrive by email: the "Suggest a wording" link opens the visitor's mail app with the pair already filled in. To change the address, edit `SUGGEST_TO` at the top of the script. To collect suggestions in a form instead, point that link at a form service's URL.
