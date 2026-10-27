@@ -175,6 +175,13 @@
     #fieldsvg .node.capped { cursor: not-allowed; opacity: .55; }
     #fieldsvg .node.blocked:hover .dot, #fieldsvg .node.capped:hover .dot { stroke: var(--faint); }
     .placeholder { color: var(--faint); font-style: italic; }
+    .reading { list-style: none; padding: 0; margin: 0; font-size: .98rem; }
+    .reading li { padding-left: 1.6em; text-indent: -1.6em; margin: 0 0 8px; }
+    .reading a { word-break: break-word; }
+    .field-actions { display: flex; gap: 16px; flex: none; }
+    .random { font-family: var(--ui); font-size: .8rem; font-weight: 500; color: var(--pen); background: var(--sheet);
+      border: 1px solid var(--rule); border-radius: 6px; padding: 5px 11px; cursor: pointer; }
+    .random:hover { border-color: var(--pen); }
     .judg { color: var(--pen); margin-right: .12em; font-weight: 700; }
     .certainty { display: flex; gap: 10px; align-items: baseline; margin: 2px 0 12px; max-width: 60ch;
       font-family: var(--ui); font-size: .8rem; line-height: 1.45; color: var(--muted); }
@@ -286,7 +293,7 @@
         <div class="pron" title="Broad phonemic transcription"><span class="slash">/</span>ˈvɪk.si ɹɪˈvɛ.ɹə<span class="slash">/</span></div>
       </div>
       <!-- EDIT: add your program, e.g. "M.A. student in Linguistics at the University of ___." -->
-      <p class="lede">I’m a graduate student in linguistics working where pragmatics meets sociolinguistics. I study social meaning: how the ways we choose to say things come to signal stance, identity, and relationship, drawing on indexicality and third-wave approaches to variation.</p>
+      <p class="lede">I’m a graduate student in linguistics interested in where pragmatics meets sociolinguistics, especially social meaning: how the way something is said can signal stance, identity, and relationship. My work draws on research on indexicality and third-wave approaches to variation.</p>
       <div class="links">
         <a class="btn primary" href="mailto:vixyryanrivera@gmail.com">Email me</a>
         <a class="btn" href="cv.pdf">Read my CV</a>
@@ -308,7 +315,7 @@
       </div>
 
       <div class="utterance" aria-live="polite"><span class="exnum" id="exnum">(1c)</span><span id="utt"></span></div>
-      <p class="certainty" id="certainty" hidden><span class="cert-mark"></span><span><span class="cert-text"></span> <span class="cert-why">A ? marks a sentence a linguist would call questionable. Combined social cues don’t simply add up: one can mute or redirect another, so the more qualities you stack, the less any single wording can be trusted.</span></span></p>
+      <p class="certainty" id="certainty" hidden><span class="cert-mark"></span><span><span class="cert-text"></span> <span class="cert-why">A ? marks a sentence a linguist would call questionable. Perception studies have found that combined social cues don’t always add up; one can mute or redirect another (e.g., Levon 2014). So the more qualities you stack, the less any wording here should be trusted.</span></span></p>
       <div class="ask" id="ask" hidden>
         <span><span id="ask-combo"></span>: how would you say it?</span>
         <a id="ask-link" href="#">Suggest a wording</a>
@@ -320,7 +327,10 @@
       </svg>
       <div class="field-foot">
         <p class="hint" id="hint"></p>
-        <button type="button" class="clear" id="clear" hidden>Clear selection</button>
+        <div class="field-actions">
+          <button type="button" class="random" id="random">Show a random combination</button>
+          <button type="button" class="clear" id="clear" hidden>Clear selection</button>
+        </div>
       </div>
       <div class="legend legend-preset" aria-hidden="true">
         <span class="l-on">indexed here</span>
@@ -332,7 +342,7 @@
         <span class="l-off">available</span>
         <span class="l-blocked">clashes with your choice</span>
       </div>
-      <figcaption class="field-cite">An indexical field, after Eckert (2008): a constellation of related meanings, any of which a form can call up in context.</figcaption>
+      <figcaption class="field-cite">An illustration inspired by Eckert’s (2008) indexical field, “a constellation of meanings that are ideologically linked.” Eckert’s fields map the potential meanings of a single linguistic variable; this one maps ways of making one request. The qualities, links, clashes, and wordings are my own and have not been tested.</figcaption>
     </figure>
   </header>
 
@@ -341,7 +351,7 @@
     <div class="wrap row">
       <h2 id="about-h">About<span class="h2-pron">/əˈbaʊt/</span></h2>
       <div class="prose">
-        <p>I am a graduate student in linguistics working at the interface of pragmatics and sociolinguistics. My work asks how social meaning is made in the gap between what is said and how it is said. Why does a speaker choose a roundabout phrasing over a plain one, or a formal register over a casual one, and how do listeners read those choices as signs of stance, persona, and relationship?</p>
+        <p>I am a graduate student in linguistics with interests at the interface of pragmatics and sociolinguistics. I’m drawn to questions about the gap between what is said and how it is said. Why might a speaker choose a roundabout phrasing over a plain one, or a formal register over a casual one, and how might listeners read those choices as signs of stance, persona, and relationship?</p>
         <p>I hold a B.A. in Linguistics from Stony Brook University, where I worked as a teaching assistant and research assistant, and I studied linguistics at Korea University in Seoul. In 2026 I completed the Michigan Humanities Emerging Research Scholars Program (MICHHERS) at the University of Michigan’s Rackham Graduate School.</p>
       </div>
     </div>
@@ -352,7 +362,7 @@
     <div class="wrap row">
       <h2 id="research-h">Research<span class="h2-pron">/ˈɹi.sɝtʃ/</span></h2>
       <div>
-        <ul class="areas" aria-label="Research areas">
+        <ul class="areas" aria-label="Research interests">
           <li>Social meaning</li>
           <li>Indexicality</li>
           <li>Third-wave variation</li>
@@ -365,8 +375,21 @@
 
         <div class="prose">
           <h3 class="sub">Intralingual translation and social meaning</h3>
-          <p>When speakers rephrase something within the same language, moving up or down in register or talking around a word instead of using it, the propositional content can stay nearly constant while the social content shifts sharply. My thesis treats these rewordings as a natural experiment. Working within third-wave variationist sociolinguistics and theories of indexicality, I examine how <em>register shift</em> and <em>circumlocution</em> come to signal interpersonal and social qualities such as politeness, intimacy, authority, and evasiveness.</p>
-          <p>More broadly, I am interested in how pragmatic inference and indexical meaning interact: how speakers draw on shared expectations about what is normally said, and how departures from those expectations become resources for constructing identity.</p>
+          <p>Jakobson (1959) used the term <em>intralingual translation</em> for rewording something within the same language. When speakers do this, moving up or down in register or talking around a word instead of using it, what they say can stay roughly the same while what it suggests about them changes. My thesis looks at <em>register shift</em> and <em>circumlocution</em> in these rewordings as signals of interpersonal and social qualities. It builds on third-wave work treating variation as a resource for stance and persona (Eckert 2008, 2012) and on accounts of how forms index stances and social types (Ochs 1992; Silverstein 2003).</p>
+          <p>More broadly, I am interested in how pragmatic inference and indexical meaning interact. Others have approached this from several directions: how an expression’s pragmatic meaning shapes the persona it projects (Acton &amp; Potts 2014; Beltrama &amp; Staum Casasanto 2017), how listeners reason from linguistic choices to social meaning (Burnett 2019), and how co-occurring features change one another’s meaning in perception (Levon 2014; Pharao et al. 2014). I am still working out where my own questions fit among these.</p>
+          <h3 class="sub" style="margin-top:28px">Work I’m building on</h3>
+          <ul class="reading">
+            <li>Acton, E. K. &amp; C. Potts. 2014. That straight talk: Sarah Palin and the sociolinguistics of demonstratives. <em>Journal of Sociolinguistics</em> 18(1). <a href="https://doi.org/10.1111/josl.12062">doi:10.1111/josl.12062</a></li>
+            <li>Beltrama, A. &amp; L. Staum Casasanto. 2017. Totally tall sounds totally younger: Intensification at the socio-semantics interface. <em>Journal of Sociolinguistics</em> 21(2). <a href="https://doi.org/10.1111/josl.12230">doi:10.1111/josl.12230</a></li>
+            <li>Burnett, H. 2019. Signalling games, sociolinguistic variation and the construction of style. <em>Linguistics and Philosophy</em> 42. <a href="https://doi.org/10.1007/s10988-018-9254-y">doi:10.1007/s10988-018-9254-y</a></li>
+            <li>Eckert, P. 2008. Variation and the indexical field. <em>Journal of Sociolinguistics</em> 12(4). <a href="https://doi.org/10.1111/j.1467-9841.2008.00374.x">doi:10.1111/j.1467-9841.2008.00374.x</a></li>
+            <li>Eckert, P. 2012. Three waves of variation study. <em>Annual Review of Anthropology</em> 41. <a href="https://doi.org/10.1146/annurev-anthro-092611-145828">doi:10.1146/annurev-anthro-092611-145828</a></li>
+            <li>Jakobson, R. 1959. On linguistic aspects of translation. In R. Brower (ed.), <em>On Translation</em>. Harvard University Press.</li>
+            <li>Levon, E. 2014. Categories, stereotypes, and the linguistic perception of sexuality. <em>Language in Society</em> 43(5). <a href="https://doi.org/10.1017/S0047404514000554">doi:10.1017/S0047404514000554</a></li>
+            <li>Ochs, E. 1992. Indexing gender. In A. Duranti &amp; C. Goodwin (eds.), <em>Rethinking Context</em>. Cambridge University Press.</li>
+            <li>Pharao, N., M. Maegaard, J. S. Møller &amp; T. Kristiansen. 2014. Indexical meanings of [s+] among Copenhagen youth. <em>Language in Society</em> 43(1). <a href="https://doi.org/10.1017/s0047404513000857">doi:10.1017/s0047404513000857</a></li>
+            <li>Silverstein, M. 2003. Indexical order and the dialectics of sociolinguistic life. <em>Language &amp; Communication</em> 23. <a href="https://doi.org/10.1016/s0271-5309(03)00013-2">doi:10.1016/s0271-5309(03)00013-2</a></li>
+          </ul>
         </div>
 
         <h3 class="sub" style="margin-top:36px">Presentations</h3>
@@ -517,7 +540,7 @@
           <li><span class="endonym">Español</span><span class="level">Spanish, limited working</span></li>
           <li><span class="endonym">日本語</span><span class="level">Japanese, elementary</span></li>
         </ul>
-        <p class="prose">Python and Java for analysis and modelling, quantitative and statistical methods, and web design. I also built and maintain an academic website for Prof. Mark Aronoff.</p>
+        <p class="prose">Python and Java for analysis and modelling, and quantitative and statistical methods. I also helped attach full-text files to the references on Prof. Mark Aronoff’s website, so more of his work is freely accessible.</p>
       </div>
     </div>
   </section>
@@ -914,14 +937,11 @@
     }
 
     var names = order.filter(function (k) { return state[k]; });
-    var text, composed = names.length >= 3;
-    if (names.length === 1) text = single[names[0]];
-    else if (names.length === 2) text = pairs[key(names[0], names[1])];
-    else { var c = compose(names); text = c.open ? null : c.text; }
+    var text = wordingFor(names), composed = names.length >= 3;
     exnum.hidden = false;
     exnum.textContent = '(2)';
     var mark = names.length === 3 ? '?' : names.length >= 4 ? '??' : '';
-    certainty.hidden = !composed;
+    certainty.hidden = !composed || !text;
     if (composed) {
       certainty.querySelector('.cert-mark').textContent = mark;
       certainty.querySelector('.cert-text').textContent = names.length === 3
@@ -948,6 +968,39 @@
         : names.join(' + ') + '. Add another, or deselect one.';
   }
 
+  // Wording for a set of qualities in tab order, or null for an open question.
+  function wordingFor(names) {
+    if (names.length === 1) return single[names[0]];
+    if (names.length === 2) return pairs[key(names[0], names[1])];
+    var c = compose(names); return c.open ? null : c.text;
+  }
+
+  // Every clash-free set of one to four qualities, split by whether it has a wording.
+  var pool = {};   // pool[size] = { worded: [...], open: [...] }
+  for (var n = 1; n <= MAX; n++) pool[n] = { worded: [], open: [] };
+  (function walk(start, cur) {
+    if (cur.length) (wordingFor(cur) ? pool[cur.length].worded : pool[cur.length].open).push(cur);
+    if (cur.length === MAX) return;
+    for (var i = start; i < order.length; i++) {
+      var q = order[i], fine = true;
+      for (var j = 0; j < cur.length; j++) if (clash[cur[j]][q]) { fine = false; break; }
+      if (fine) walk(i + 1, cur.concat(q));
+    }
+  })(0, []);
+
+  function randomize() {
+    // Pick a size first so short and long combinations come up equally often;
+    // then mostly worded combinations, with an open question about one time in six.
+    var size = 1 + Math.floor(Math.random() * MAX), bucket = pool[size];
+    var list = (Math.random() < 1 / 6 && bucket.open.length) ? bucket.open : bucket.worded, pick;
+    do { pick = list[Math.floor(Math.random() * list.length)]; }
+    while (list.length > 1 && pick.join() === selected.slice().sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); }).join());
+    mode = 'build';
+    radios.forEach(function (r) { r.checked = false; });
+    selected = pick.slice();
+    render();
+  }
+
   function toggle(k) {
     var g = nodeEls[k];
     if (g.getAttribute('aria-disabled') === 'true') return;
@@ -965,6 +1018,7 @@
     inp.addEventListener('change', function () { showPreset(inp.value); });
   });
   clearBtn.addEventListener('click', function () { selected = []; render(); });
+  document.getElementById('random').addEventListener('click', randomize);
 
   showPreset('circ');
 })();
