@@ -10,3 +10,13 @@ All files sit at the top level of the repository; keep them there.
 - `favicon.svg`: browser-tab icon
 
 To edit text, open `index.html` on GitHub, click the pencil icon, make the change, and commit. The live site updates within a minute or two. Lines marked `EDIT:` are spots meant to be filled in.
+
+## The indexical-field figure
+
+The wordings, clashing pairs and open questions all live in the `<script>` near the bottom of `index.html`:
+
+- `single`: the wording for each quality on its own
+- `pairs`: the wording for each pair; `null` marks an open question that visitors can answer
+- `incompatible`: pairs that gray each other out
+
+Visitor suggestions for open questions arrive by email: the "Suggest a wording" link opens the visitor's mail app with the pair already filled in. To change the address, edit `SUGGEST_TO` at the top of the script. To collect suggestions in a form instead, point that link at a form service's URL.

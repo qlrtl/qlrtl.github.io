@@ -105,7 +105,7 @@
     }
     .pron { font-size: clamp(1.15rem, 1.9vw, 1.45rem); color: var(--muted); margin-top: 8px; }
     .pron .slash { color: var(--faint); }
-    .lede { font-size: clamp(1.2rem, 1.8vw, 1.38rem); line-height: 1.5; margin: 30px 0 0; max-width: 34ch; }
+    .lede { font-size: clamp(1.2rem, 1.8vw, 1.38rem); line-height: 1.5; margin: 30px 0 0; max-width: 40ch; }
     .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
     .btn {
       font-family: var(--ui); font-size: .9rem; font-weight: 500;
@@ -164,6 +164,30 @@
     .legend .l-on::before { background: var(--pen); }
     .legend .l-maybe::before { border: 1.4px dashed var(--pen); }
     .legend .l-off::before { border: 1.4px solid var(--faint); }
+    #fieldsvg .node { cursor: pointer; outline: none; }
+    #fieldsvg .hit { fill: transparent; }
+    #fieldsvg .ring { fill: none; stroke: transparent; stroke-width: 2; }
+    #fieldsvg .node:focus-visible .ring { stroke: var(--pen); }
+    #fieldsvg .node:hover .dot { stroke: var(--pen); }
+    #fieldsvg .node.blocked { cursor: not-allowed; }
+    #fieldsvg .node.blocked text { opacity: .4; }
+    #fieldsvg .node.blocked .dot { stroke-dasharray: 1.5 2.5; opacity: .6; }
+    #fieldsvg .node.capped { cursor: not-allowed; opacity: .55; }
+    #fieldsvg .node.blocked:hover .dot, #fieldsvg .node.capped:hover .dot { stroke: var(--faint); }
+    .placeholder { color: var(--faint); font-style: italic; }
+    .exnum[hidden] { display: none; }
+    .ask { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 2px 0 12px;
+      font-family: var(--ui); font-size: .86rem; color: var(--muted); }
+    .ask[hidden] { display: none; }
+    .ask a { font-weight: 500; }
+    .field-foot { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; margin-top: 8px; }
+    .hint { font-family: var(--ui); font-size: .8rem; color: var(--muted); margin: 0; }
+    .clear { font-family: var(--ui); font-size: .8rem; color: var(--pen); background: none; border: 0; padding: 2px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+    .clear[hidden] { display: none; }
+    .legend-build { display: none; }
+    .field.building .legend-preset { display: none; }
+    .field.building .legend-build { display: flex; }
+    .legend .l-blocked::before { border: 1.4px dashed var(--faint); opacity: .6; }
     .field-cite { font-family: var(--ui); font-size: .76rem; color: var(--faint); margin: 10px 0 0; }
 
     /* ============ Sections ============ */
@@ -255,7 +279,7 @@
         <div class="pron" title="Broad phonemic transcription"><span class="slash">/</span>ˈvɪk.si ɹɪˈvɛ.ɹə<span class="slash">/</span></div>
       </div>
       <!-- EDIT: add your program, e.g. "M.A. student in Linguistics at the University of ___." -->
-      <p class="lede">Graduate student in linguistics. I study how saying the same thing another way changes who you sound like.</p>
+      <p class="lede">I’m a graduate student in linguistics working where pragmatics meets sociolinguistics. I study social meaning: how the ways we choose to say things come to signal stance, identity, and relationship, drawing on indexicality and third-wave approaches to variation.</p>
       <div class="links">
         <a class="btn primary" href="mailto:vixyryanrivera@gmail.com">Email me</a>
         <a class="btn" href="cv.pdf">Read my CV</a>
@@ -266,7 +290,7 @@
       </div>
     </div>
 
-    <figure class="field" aria-labelledby="field-title" style="margin:0">
+    <figure class="field" id="field" aria-labelledby="field-title" style="margin:0">
       <div class="field-head">
         <p class="field-title" id="field-title">One request, three registers</p>
         <div class="seg" role="radiogroup" aria-label="Choose a register">
@@ -277,15 +301,28 @@
       </div>
 
       <div class="utterance" aria-live="polite"><span class="exnum" id="exnum">(1c)</span><span id="utt"></span></div>
+      <div class="ask" id="ask" hidden>
+        <span><span id="ask-combo"></span>: how would you say it?</span>
+        <a id="ask-link" href="#">Suggest a wording</a>
+      </div>
       <p class="prop">Propositional content, unchanged: <code>request(hearer, pass(salt))</code></p>
 
-      <svg id="fieldsvg" viewBox="0 0 640 330" role="img" aria-label="Indexical field: qualities the chosen wording can signal">
-        <g id="edges"></g><g id="nodes"></g>
+      <svg id="fieldsvg" viewBox="0 0 640 330" role="group" aria-label="Indexical field. Each quality is a button; select up to two to build a wording.">
+        <g id="edges" aria-hidden="true"></g><g id="nodes"></g>
       </svg>
-      <div class="legend" aria-hidden="true">
+      <div class="field-foot">
+        <p class="hint" id="hint"></p>
+        <button type="button" class="clear" id="clear" hidden>Clear selection</button>
+      </div>
+      <div class="legend legend-preset" aria-hidden="true">
         <span class="l-on">indexed here</span>
         <span class="l-maybe">available with the right delivery</span>
         <span class="l-off">elsewhere in the field</span>
+      </div>
+      <div class="legend legend-build" aria-hidden="true">
+        <span class="l-on">selected</span>
+        <span class="l-off">available</span>
+        <span class="l-blocked">clashes with your choice</span>
       </div>
       <figcaption class="field-cite">An indexical field, after Eckert (2008): a constellation of related meanings, any of which a form can call up in context.</figcaption>
     </figure>
@@ -497,7 +534,23 @@
 (function () {
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ---- The field: qualities and their positions (viewBox 640 x 330) ----
+  /* =====================================================================
+     The indexical field
+     - Presets (Plain, Hedged, Circumlocutory) show which qualities a wording
+       calls up. Choosing a preset clears any node selection.
+     - Selecting nodes builds a wording instead: up to two at once.
+       Selecting a node switches the figure out of preset mode.
+     - Incompatible pairs gray each other out; deselecting restores them.
+     - Every wording keeps the same proposition: request(hearer, pass(salt)).
+     ===================================================================== */
+
+  // Where to send suggested wordings (a pre-filled email; see README).
+  var SUGGEST_TO = 'vixyryanrivera@gmail.com';
+  var MAX = 2;
+
+  // Qualities and positions (viewBox 640 x 330). Order = keyboard tab order.
+  var order = ['direct','efficient','brusque','familiar','casual','friendly','exasperated',
+               'considerate','polite','careful','deferential','distant','formal'];
   var nodes = {
     direct:      [60, 70],
     efficient:   [175, 30],
@@ -522,7 +575,121 @@
     ['careful','distant'], ['brusque','exasperated'], ['exasperated','polite']
   ];
 
-  // ---- The three registers ----
+  // Pairs that make contradictory claims; symmetric by construction.
+  var incompatible = [
+    ['direct','distant'],      // bald imperative presumes the right to impose; distance denies it
+    ['direct','careful'],      // one claims no mitigation is needed, the other is all mitigation
+    ['familiar','distant'],    // opposite claims about the relationship itself
+    ['casual','formal'],       // opposite ends of the same register scale
+    ['brusque','considerate'], // ignoring the hearer's face vs. attending to it
+    ['brusque','deferential'], // curtness vs. elevating the hearer
+    ['brusque','friendly']     // cold vs. warm affect
+  ];
+
+  // One-quality wordings.
+  var single = {
+    direct:      'Pass the salt.',
+    efficient:   'Salt?',
+    brusque:     'Salt.',
+    familiar:    'Hand me the salt, hon.',
+    casual:      'Can you grab the salt?',
+    friendly:    'Hey, could you pass the salt? Thanks!',
+    considerate: 'Could you pass the salt when you get a chance?',
+    polite:      'Could you pass the salt, please?',
+    careful:     'Sorry, I don’t mean to interrupt, but could I possibly have the salt?',
+    deferential: 'If it’s not too much trouble, would you mind passing the salt?',
+    formal:      'May I trouble you for the salt?',
+    distant:     'Excuse me, could you pass the salt?',
+    exasperated: 'Could you pass the salt. Please.'
+  };
+
+  // Two-quality wordings. null = open question for visitors.
+  var pairs = {
+    'direct+efficient':     'Pass the salt.',
+    'direct+brusque':       'Pass. The salt.',
+    'direct+familiar':      'Pass me the salt, babe.',
+    'direct+casual':        'Pass the salt, would you?',
+    'direct+friendly':      'Pass me the salt? Thanks so much!',
+    'direct+exasperated':   'Just pass the salt.',
+    'direct+considerate':   'Pass the salt whenever you’re ready.',
+    'direct+polite':        'Pass the salt, please.',
+    'direct+deferential':   'Please pass the salt, sir.',
+    'direct+formal':        'Kindly pass the salt.',
+
+    'efficient+brusque':    'Salt.',
+    'efficient+familiar':   'Salt, babe?',
+    'efficient+casual':     'Salt me?',
+    'efficient+friendly':   'Salt, please? Thanks!',
+    'efficient+exasperated':'Salt. Please.',
+    'efficient+considerate':'Salt, when you’re done?',
+    'efficient+polite':     'Salt, please?',
+    'efficient+careful':    'Salt, if you’re done with it?',
+    'efficient+deferential':'The salt, please, sir?',
+    'efficient+distant':    'Excuse me, salt?',
+    'efficient+formal':     'The salt, if you please.',
+
+    'brusque+familiar':     'Babe. Salt.',
+    'brusque+casual':       'Salt, c’mon.',
+    'brusque+exasperated':  'Salt. Seriously.',
+    'brusque+polite':       'The salt, please.',
+    'brusque+careful':      null,
+    'brusque+distant':      'Excuse me. Salt.',
+    'brusque+formal':       'The salt, if you would.',
+
+    'familiar+casual':      'Grab me the salt, babe?',
+    'familiar+friendly':    'Pass the salt, sweetie? Thanks!',
+    'familiar+exasperated': 'Babe. The salt. Please.',
+    'familiar+considerate': 'Hon, could you pass me the salt when you get a sec?',
+    'familiar+polite':      'Could you pass the salt, please, Mom?',
+    'familiar+careful':     null,
+    'familiar+deferential': 'Grandma, would you mind passing the salt?',
+    'familiar+formal':      'Might I trouble madam for the salt?',
+
+    'casual+friendly':      'Hey, can you grab the salt? Thanks!',
+    'casual+exasperated':   'Dude, the salt?',
+    'casual+considerate':   'Can you grab the salt when you’ve got a sec?',
+    'casual+polite':        'Can you pass the salt, please?',
+    'casual+careful':       'Sorry, could I grab the salt real quick?',
+    'casual+deferential':   null,
+    'casual+distant':       'Hey, mind passing the salt?',
+
+    'friendly+exasperated': 'Could you pass the salt? Thaaanks.',
+    'friendly+considerate': 'Hey, could you pass the salt whenever you get a chance? Thanks so much!',
+    'friendly+polite':      'Could you pass the salt, please? Thank you!',
+    'friendly+careful':     'Sorry to bug you, could I steal the salt?',
+    'friendly+deferential': null,
+    'friendly+distant':     'Hi there! Could you pass the salt, please?',
+    'friendly+formal':      'Would you be so kind as to pass the salt? Thank you so much!',
+
+    'exasperated+considerate': 'Whenever you get a chance. The salt.',
+    'exasperated+polite':      'Could you please pass the salt.',
+    'exasperated+careful':     null,
+    'exasperated+deferential': 'Would you mind passing the salt, if it’s no trouble?',
+    'exasperated+distant':     null,
+    'exasperated+formal':      'Would you kindly pass the salt.',
+
+    'considerate+polite':      'Could you pass the salt when you have a moment, please?',
+    'considerate+careful':     'Sorry, no rush at all, but could I have the salt when you’re done?',
+    'considerate+deferential': 'Whenever it’s convenient for you, would you mind passing the salt?',
+    'considerate+distant':     'Excuse me, when you get a chance, could you pass the salt?',
+    'considerate+formal':      'When you have a moment, would you kindly pass the salt?',
+
+    'polite+careful':          'I’m so sorry, could I possibly have the salt, please?',
+    'polite+deferential':      'If you wouldn’t mind, could you pass the salt, please?',
+    'polite+distant':          'Excuse me, could you pass the salt, please?',
+    'polite+formal':           'May I have the salt, please?',
+
+    'careful+deferential':     'I’m sorry to impose, but would you mind terribly passing the salt?',
+    'careful+distant':         'Sorry to bother you, but would you mind passing the salt?',
+    'careful+formal':          'If I might trouble you for the salt?',
+
+    'deferential+distant':     'Pardon me, would you mind passing the salt?',
+    'deferential+formal':      'Would you be so kind as to pass the salt?',
+
+    'distant+formal':          'Excuse me, might I trouble you for the salt?'
+  };
+
+  // Presets: unchanged from before.
   var registers = {
     plain:  { num: '(1a)', html: 'Pass the salt.',
               on: ['direct','efficient','familiar','casual'], maybe: ['brusque'] },
@@ -532,6 +699,14 @@
               on: ['careful','deferential','formal','distant','polite'], maybe: ['exasperated'] }
   };
 
+  // ---------- helpers ----------
+  function key(a, b) { return order.indexOf(a) < order.indexOf(b) ? a + '+' + b : b + '+' + a; }
+  var clash = {};
+  order.forEach(function (k) { clash[k] = {}; });
+  incompatible.forEach(function (p) { clash[p[0]][p[1]] = true; clash[p[1]][p[0]] = true; });
+  function esc(s) { return s.replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+
+  // ---------- build the SVG ----------
   var NS = 'http://www.w3.org/2000/svg';
   var gE = document.getElementById('edges'), gN = document.getElementById('nodes');
   var edgeEls = [], nodeEls = {};
@@ -545,31 +720,44 @@
     gE.appendChild(l); edgeEls.push([l, e[0], e[1]]);
   });
 
-  Object.keys(nodes).forEach(function (k) {
+  order.forEach(function (k) {
     var p = nodes[k], g = document.createElementNS(NS, 'g');
     g.setAttribute('class', 'node');
+    g.setAttribute('tabindex', '0');
+    g.setAttribute('role', 'button');
+    g.setAttribute('aria-pressed', 'false');
+    g.setAttribute('aria-label', k);
+    var hit = document.createElementNS(NS, 'circle');   // generous tap target
+    hit.setAttribute('cx', p[0]); hit.setAttribute('cy', p[1]); hit.setAttribute('r', 18); hit.setAttribute('class', 'hit');
+    var ring = document.createElementNS(NS, 'circle');  // keyboard focus ring
+    ring.setAttribute('cx', p[0]); ring.setAttribute('cy', p[1]); ring.setAttribute('r', 11); ring.setAttribute('class', 'ring');
     var c = document.createElementNS(NS, 'circle');
     c.setAttribute('cx', p[0]); c.setAttribute('cy', p[1]); c.setAttribute('r', 6); c.setAttribute('class', 'dot');
     var t = document.createElementNS(NS, 'text');
-    // Keep labels inside the frame: right-hand nodes label to the left
     var right = p[0] > 560;
     t.setAttribute('x', right ? p[0] - 12 : p[0] + 12);
     t.setAttribute('y', p[1] + 5);
     t.setAttribute('text-anchor', right ? 'end' : 'start');
     t.textContent = k;
-    g.appendChild(c); g.appendChild(t); gN.appendChild(g); nodeEls[k] = g;
+    g.appendChild(hit); g.appendChild(ring); g.appendChild(c); g.appendChild(t);
+    gN.appendChild(g); nodeEls[k] = g;
+
+    g.addEventListener('click', function () { toggle(k); });
+    g.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggle(k); }
+    });
   });
 
-  function show(key) {
-    var r = registers[key];
-    document.getElementById('utt').innerHTML = r.html;
-    document.getElementById('exnum').textContent = r.num;
-    var state = {};
-    r.on.forEach(function (k) { state[k] = 'on'; });
-    r.maybe.forEach(function (k) { state[k] = 'maybe'; });
-    Object.keys(nodeEls).forEach(function (k) {
-      nodeEls[k].setAttribute('class', 'node' + (state[k] ? ' ' + state[k] : ''));
-    });
+  // ---------- state & rendering ----------
+  var fig = document.getElementById('field');
+  var utt = document.getElementById('utt'), exnum = document.getElementById('exnum');
+  var hint = document.getElementById('hint'), ask = document.getElementById('ask');
+  var askLink = document.getElementById('ask-link'), clearBtn = document.getElementById('clear');
+  var radios = document.querySelectorAll('input[name="reg"]');
+  var selected = [];   // build mode selection
+  var mode = 'preset';
+
+  function paintEdges(state) {
     edgeEls.forEach(function (e) {
       var s1 = state[e[1]], s2 = state[e[2]], cls = 'edge';
       if (s1 === 'on' && s2 === 'on') cls += ' on';
@@ -578,10 +766,97 @@
     });
   }
 
-  document.querySelectorAll('input[name="reg"]').forEach(function (inp) {
-    inp.addEventListener('change', function () { show(inp.value); });
+  function showPreset(name) {
+    mode = 'preset'; selected = [];
+    fig.classList.remove('building');
+    var r = registers[name], state = {};
+    r.on.forEach(function (k) { state[k] = 'on'; });
+    r.maybe.forEach(function (k) { state[k] = 'maybe'; });
+    order.forEach(function (k) {
+      var g = nodeEls[k];
+      g.setAttribute('class', 'node' + (state[k] ? ' ' + state[k] : ''));
+      g.setAttribute('aria-pressed', 'false');
+      g.removeAttribute('aria-disabled');
+      g.setAttribute('aria-label', k);
+    });
+    paintEdges(state);
+    exnum.textContent = r.num; exnum.hidden = false;
+    utt.innerHTML = r.html;
+    ask.hidden = true; clearBtn.hidden = true;
+    hint.textContent = 'Or select up to two qualities in the field to build your own wording.';
+  }
+
+  function render() {
+    fig.classList.add('building');
+    var blocked = {}, state = {};
+    selected.forEach(function (s) {
+      state[s] = 'on';
+      Object.keys(clash[s]).forEach(function (k) { blocked[k] = s; });
+    });
+    var full = selected.length >= MAX;
+
+    order.forEach(function (k) {
+      var g = nodeEls[k], cls = 'node', label = k, disabled = false;
+      if (state[k]) { cls += ' on'; label += ', selected'; }
+      else if (blocked[k]) { cls += ' blocked'; disabled = true; label += ', unavailable: clashes with ' + blocked[k]; }
+      else if (full) { cls += ' capped'; disabled = true; label += ', unavailable: two qualities already selected'; }
+      g.setAttribute('class', cls);
+      g.setAttribute('aria-pressed', state[k] ? 'true' : 'false');
+      if (disabled) g.setAttribute('aria-disabled', 'true'); else g.removeAttribute('aria-disabled');
+      g.setAttribute('aria-label', label);
+    });
+    paintEdges(state);
+    clearBtn.hidden = selected.length === 0;
+
+    if (selected.length === 0) {
+      exnum.hidden = true;
+      utt.innerHTML = '<span class="placeholder">Select a quality in the field below.</span>';
+      ask.hidden = true;
+      hint.textContent = 'Select up to two qualities. Grayed-out ones clash with your choice.';
+      return;
+    }
+
+    var names = order.filter(function (k) { return state[k]; });
+    var text = names.length === 1 ? single[names[0]] : pairs[key(names[0], names[1])];
+    exnum.hidden = false;
+    exnum.textContent = '(2)';
+
+    if (text) {
+      utt.innerHTML = esc(text);
+      ask.hidden = true;
+    } else {
+      utt.innerHTML = '<span class="placeholder">No wording yet.</span>';
+      var combo = names.join(' + ');
+      document.getElementById('ask-combo').textContent = combo;
+      askLink.href = 'mailto:' + SUGGEST_TO +
+        '?subject=' + encodeURIComponent('Wording suggestion: ' + combo) +
+        '&body=' + encodeURIComponent('Request: pass the salt\nQualities: ' + combo + '\n\nMy wording:\n\n');
+      ask.hidden = false;
+    }
+    hint.textContent = names.length === 1
+      ? names[0] + ' alone. Add one more quality, or choose a preset above.'
+      : names.join(' + ') + '. Deselect one to try another pair.';
+  }
+
+  function toggle(k) {
+    var g = nodeEls[k];
+    if (g.getAttribute('aria-disabled') === 'true') return;
+    if (mode === 'preset') {
+      mode = 'build'; selected = [];
+      radios.forEach(function (r) { r.checked = false; });
+    }
+    var i = selected.indexOf(k);
+    if (i >= 0) selected.splice(i, 1);
+    else if (selected.length < MAX) selected.push(k);
+    render();
+  }
+
+  radios.forEach(function (inp) {
+    inp.addEventListener('change', function () { showPreset(inp.value); });
   });
-  show('circ');
+  clearBtn.addEventListener('click', function () { selected = []; render(); });
+
+  showPreset('circ');
 })();
 </script>
 </body>
