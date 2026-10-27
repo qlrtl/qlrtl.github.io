@@ -3,139 +3,231 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vixy Rivera · Linguistics</title>
-  <meta name="description" content="Vixy Rivera — graduate student in linguistics working at the interface of pragmatics and sociolinguistics: social meaning, indexicality, register shift, and intralingual translation.">
+  <title>Vixy Rivera, Linguistics</title>
+  <meta name="description" content="Vixy Rivera is a graduate student in linguistics working at the interface of pragmatics and sociolinguistics: social meaning, indexicality, register shift, and intralingual translation.">
   <meta name="author" content="Vixy Rivera">
-  <meta property="og:title" content="Vixy Rivera · Linguistics">
-  <meta property="og:description" content="Pragmatics, sociolinguistics, and the social meaning of saying things differently.">
-  <meta property="og:image" content="images/portrait.jpg">
-  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="Vixy Rivera, Linguistics">
+  <meta property="og:description" content="Pragmatics, sociolinguistics, and the social meaning of saying the same thing another way.">
+  <meta property="og:image" content="portrait.jpg">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* ---------- Colour tokens (light / dark) ---------- */
+    /* ============ Tokens ============ */
     :root {
-      --paper: #f7f5f0;
-      --ink: #1d1d1b;
-      --muted: #64625c;
-      --rule: #dcd8ce;
-      --accent: #1f5c5f;      /* deep teal */
-      --accent-soft: #e4ecea;
-      --mark: #8a3b2e;        /* oxblood, for the “indexes” arrow */
-      --serif: "Source Serif 4", Georgia, serif;
-      --ipa: "Gentium Book Plus", "Charis SIL", "Doulos SIL", "Noto Serif", serif;
-      --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --paper: #f2f3ef;        /* cool, slightly green-grey paper */
+      --sheet: #fbfbf8;        /* the raised "handout" surface */
+      --ink: #1a2329;          /* blue-black ink */
+      --muted: #5c676d;
+      --faint: #9aa3a6;
+      --rule: #d6dbd6;
+      --pen: #2a4a86;          /* fountain-pen blue */
+      --pen-soft: #e3e9f4;
+      --hilite: #f3dc74;       /* transcript highlighter */
+      --hilite-ink: #3b3200;
+
+      --display: "Gentium Book Plus", "Charis SIL", "Doulos SIL", Georgia, serif;
+      --ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --wide: 1200px;
+      --gutter: clamp(20px, 4vw, 48px);
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --paper: #161816;
-        --ink: #e8e5dd;
-        --muted: #9d9a91;
-        --rule: #33352f;
-        --accent: #7fb7b2;
-        --accent-soft: #1f2a28;
-        --mark: #d98b78;
+        --paper: #11161a;
+        --sheet: #171d22;
+        --ink: #e2e6e3;
+        --muted: #9aa5aa;
+        --faint: #5d686e;
+        --rule: #2b343a;
+        --pen: #92b2ec;
+        --pen-soft: #1d2838;
+        --hilite: #6e5c17;
+        --hilite-ink: #fff3c4;
       }
     }
 
-    /* ---------- Base ---------- */
-    * { box-sizing: border-box; }
+    /* ============ Base ============ */
+    *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
     body {
       margin: 0;
       background: var(--paper);
       color: var(--ink);
-      font-family: var(--serif);
-      font-size: 1.08rem;
-      line-height: 1.65;
+      font-family: var(--display);
+      font-size: 1.15rem;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
-    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a { color: var(--pen); text-decoration-thickness: 1px; text-underline-offset: 3px; }
     a:hover { text-decoration-thickness: 2px; }
-    .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
-    .ipa { font-family: var(--ipa); }
-    .sc { font-variant: small-caps; letter-spacing: .03em; }
+    :focus-visible { outline: 2px solid var(--pen); outline-offset: 3px; border-radius: 2px; }
+    .wrap { max-width: var(--wide); margin: 0 auto; padding: 0 var(--gutter); }
+    p { margin: 0 0 1em; }
+    em { font-style: italic; }
 
-    /* ---------- Nav ---------- */
+    /* ============ Nav ============ */
     nav {
-      position: sticky; top: 0; z-index: 10;
-      background: color-mix(in srgb, var(--paper) 92%, transparent);
-      backdrop-filter: blur(6px);
+      position: sticky; top: 0; z-index: 20;
+      background: color-mix(in srgb, var(--paper) 90%, transparent);
+      backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--rule);
     }
-    nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 52px; gap: 16px; }
-    nav .home { font-family: var(--ipa); color: var(--ink); text-decoration: none; font-size: 1.05rem; white-space: nowrap; }
-    nav ul { list-style: none; display: flex; gap: 18px; margin: 0; padding: 0; overflow-x: auto; }
-    nav ul a { font-family: var(--sans); font-size: .85rem; color: var(--muted); text-decoration: none; white-space: nowrap; }
+    nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 56px; }
+    .home { font-size: 1.15rem; color: var(--ink); text-decoration: none; white-space: nowrap; }
+    nav ul { list-style: none; display: flex; gap: 26px; margin: 0; padding: 0; overflow-x: auto; scrollbar-width: none; }
+    nav ul a { font-family: var(--ui); font-size: .88rem; color: var(--muted); text-decoration: none; white-space: nowrap; }
     nav ul a:hover { color: var(--ink); }
 
-    /* ---------- Header ---------- */
-    header { padding: 64px 0 40px; }
-    .intro { display: grid; grid-template-columns: 1fr 180px; gap: 36px; align-items: center; }
-    h1 { font-weight: 600; font-size: clamp(2.1rem, 6vw, 2.9rem); line-height: 1.1; margin: 0; letter-spacing: -.01em; }
-    .pron {
-      display: block; margin-top: 10px;
-      font-family: var(--ipa); font-size: 1.25rem; color: var(--muted); font-weight: 400;
+    /* ============ Hero ============ */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: clamp(32px, 5vw, 72px);
+      align-items: center;
+      padding-top: clamp(48px, 8vw, 96px);
+      padding-bottom: clamp(48px, 7vw, 88px);
     }
-    .role { font-family: var(--sans); font-size: .95rem; color: var(--muted); margin: 18px 0 0; line-height: 1.5; }
-    .portrait { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; object-position: 50% 35%; border: 1px solid var(--rule); }
-    .links { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--sans); font-size: .9rem; }
-
-    /* ---------- Linguistic example block ---------- */
-    .example {
-      margin: 36px 0 0; padding: 22px 24px;
-      background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 2px;
-      font-family: var(--ipa); font-size: 1.08rem; line-height: 1.55;
+    .who { display: grid; grid-template-columns: auto 1fr; gap: 0 22px; align-items: center; }
+    .portrait {
+      width: 96px; height: 96px; border-radius: 50%;
+      object-fit: cover; object-position: 50% 35%;
+      grid-row: span 2;
     }
-    .ex-row { display: grid; grid-template-columns: 2.2em 1.6em 1fr; }
-    .ex-num { color: var(--muted); }
-    .ex-gloss { grid-column: 3; color: var(--muted); font-size: .95rem; margin-bottom: 6px; }
-    .ex-gloss .idx { color: var(--mark); }
-    .ex-note { margin: 14px 0 0; font-family: var(--serif); font-size: .95rem; color: var(--muted); }
-
-    /* ---------- Sections ---------- */
-    section { padding: 40px 0 8px; border-top: 1px solid var(--rule); }
-    h2 {
-      font-family: var(--sans); font-weight: 500; font-size: .82rem;
-      text-transform: uppercase; letter-spacing: .14em; color: var(--muted);
-      margin: 0 0 22px;
+    h1 {
+      font-weight: 700; margin: 0;
+      font-size: clamp(2.6rem, 5.2vw, 3.9rem);
+      line-height: 1; letter-spacing: -.015em;
     }
-    h2 .num { font-family: var(--ipa); text-transform: none; letter-spacing: 0; color: var(--accent); margin-right: 8px; font-size: 1rem; }
-    h3 { font-size: 1.12rem; font-weight: 600; margin: 0; }
-    p { margin: 0 0 1em; }
+    .pron { font-size: clamp(1.15rem, 1.9vw, 1.45rem); color: var(--muted); margin-top: 8px; }
+    .pron .slash { color: var(--faint); }
+    .lede { font-size: clamp(1.2rem, 1.8vw, 1.38rem); line-height: 1.5; margin: 30px 0 0; max-width: 34ch; }
+    .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    .btn {
+      font-family: var(--ui); font-size: .9rem; font-weight: 500;
+      padding: 9px 16px; border-radius: 6px; text-decoration: none;
+      border: 1px solid var(--rule); color: var(--ink); background: var(--sheet);
+    }
+    .btn:hover { border-color: var(--pen); color: var(--pen); }
+    .btn.primary { background: var(--pen); color: var(--sheet); border-color: var(--pen); }
+    .btn.primary:hover { color: var(--sheet); filter: brightness(1.08); }
 
+    /* ---------- The indexical field ---------- */
+    .field {
+      background: var(--sheet);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: clamp(18px, 2.4vw, 28px);
+      box-shadow: 0 1px 0 var(--rule), 0 18px 40px -28px rgba(26, 35, 41, .35);
+    }
+    .field-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+    .field-title { font-family: var(--ui); font-size: .85rem; color: var(--muted); margin: 0; }
+    .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 7px; padding: 3px; gap: 2px; background: var(--paper); }
+    .seg input { position: absolute; opacity: 0; pointer-events: none; }
+    .seg label {
+      font-family: var(--ui); font-size: .82rem; padding: 6px 12px; border-radius: 5px;
+      cursor: pointer; color: var(--muted); user-select: none;
+    }
+    .seg input:checked + label { background: var(--sheet); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+    .seg input:focus-visible + label { outline: 2px solid var(--pen); outline-offset: 1px; }
+
+    .utterance {
+      margin: 22px 0 4px; min-height: 2.6em;
+      font-size: clamp(1.35rem, 2.3vw, 1.75rem); line-height: 1.3;
+      display: flex; gap: .55em; align-items: baseline;
+    }
+    .utterance .exnum { color: var(--faint); font-size: .8em; }
+    .utterance mark {
+      background: linear-gradient(transparent 58%, var(--hilite) 58%, var(--hilite) 92%, transparent 92%);
+      color: inherit; padding: 0 .06em;
+    }
+    .prop { font-family: var(--ui); font-size: .82rem; color: var(--muted); margin: 0 0 6px; }
+    .prop code { font-family: var(--display); font-size: 1.05rem; color: var(--ink); font-variant: small-caps; letter-spacing: .02em; }
+
+    #fieldsvg { width: 100%; height: auto; display: block; margin-top: 4px; overflow: visible; }
+    #fieldsvg .edge { stroke: var(--rule); stroke-width: 1.2; transition: stroke .35s, stroke-width .35s; }
+    #fieldsvg .edge.on { stroke: var(--pen); stroke-width: 1.8; }
+    #fieldsvg .edge.maybe { stroke: var(--pen); stroke-dasharray: 3 4; opacity: .7; }
+    #fieldsvg .dot { fill: var(--sheet); stroke: var(--faint); stroke-width: 1.4; transition: fill .35s, stroke .35s; }
+    #fieldsvg .node.on .dot { fill: var(--pen); stroke: var(--pen); }
+    #fieldsvg .node.maybe .dot { fill: var(--sheet); stroke: var(--pen); stroke-dasharray: 2 2.5; }
+    #fieldsvg text { font-family: var(--display); font-size: 17px; fill: var(--faint); transition: fill .35s;
+      paint-order: stroke; stroke: var(--sheet); stroke-width: 5px; stroke-linejoin: round; }
+    #fieldsvg .node.on text { fill: var(--ink); font-weight: 700; }
+    #fieldsvg .node.maybe text { fill: var(--pen); font-style: italic; }
+    .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--ui); font-size: .78rem; color: var(--muted); margin-top: 10px; }
+    .legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+    .legend .l-on::before { background: var(--pen); }
+    .legend .l-maybe::before { border: 1.4px dashed var(--pen); }
+    .legend .l-off::before { border: 1.4px solid var(--faint); }
+    .field-cite { font-family: var(--ui); font-size: .76rem; color: var(--faint); margin: 10px 0 0; }
+
+    /* ============ Sections ============ */
+    section { border-top: 1px solid var(--rule); padding: clamp(40px, 6vw, 72px) 0; }
+    .row { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); }
+    h2 { font-size: 1.75rem; font-weight: 700; line-height: 1.15; margin: 0; letter-spacing: -.01em; }
+    .h2-pron { display: block; font-size: 1.02rem; font-weight: 400; color: var(--faint); margin-top: 6px; letter-spacing: 0; }
+    .prose { max-width: 66ch; }
+    h3 { font-size: 1.2rem; font-weight: 700; margin: 0; line-height: 1.3; }
+    .sub { font-size: 1.3rem; font-weight: 700; margin: 0 0 12px; }
+
+    .areas { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 32px; }
+    .areas li {
+      font-family: var(--ui); font-size: .84rem; padding: 5px 12px; border-radius: 999px;
+      background: var(--pen-soft); color: var(--pen);
+    }
+
+    /* Timeline-style entries: date in the margin */
     .entries { list-style: none; margin: 0; padding: 0; }
-    .entries li { display: grid; grid-template-columns: 150px 1fr; gap: 20px; padding: 12px 0; }
-    .entries li + li { border-top: 1px dashed var(--rule); }
-    .when { font-family: var(--sans); font-size: .85rem; color: var(--muted); padding-top: 3px; }
-    .where { color: var(--muted); font-size: .97rem; }
-    .detail { font-size: .97rem; margin-top: 4px; }
+    .entries > li { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 24px; padding: 18px 0; }
+    .entries > li + li { border-top: 1px solid var(--rule); }
+    .when { font-family: var(--ui); font-size: .84rem; color: var(--muted); padding-top: 4px; font-variant-numeric: tabular-nums; }
+    .where { color: var(--muted); font-size: 1.02rem; margin-top: 2px; }
+    .detail { font-size: 1.04rem; margin-top: 6px; max-width: 64ch; }
 
-    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 22px; padding: 0; list-style: none; }
-    .tags li { font-family: var(--sans); font-size: .82rem; padding: 4px 11px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink); }
+    /* Two-up layout for research experience on wide screens */
+    .twocol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; }
+    .twocol .entries > li:first-child { border-top: 0; }
 
-    .langs { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
-    .langs li { border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; }
-    .langs .endonym { font-family: var(--ipa); font-size: 1.15rem; display: block; }
-    .langs .level { font-family: var(--sans); font-size: .8rem; color: var(--muted); }
+    .langs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; list-style: none; padding: 0; margin: 0 0 28px; }
+    .langs li { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; }
+    .langs .endonym { display: block; font-size: 1.45rem; line-height: 1.2; }
+    .langs .level { font-family: var(--ui); font-size: .8rem; color: var(--muted); }
 
-    footer { border-top: 1px solid var(--rule); margin-top: 48px; padding: 28px 0 48px; font-family: var(--sans); font-size: .82rem; color: var(--muted); }
-    footer p { margin: 0 0 6px; }
-
-    /* ---------- Small screens ---------- */
-    @media (max-width: 640px) {
-      header { padding: 40px 0 28px; }
-      .intro { grid-template-columns: 1fr; gap: 22px; }
-      .portrait { width: 120px; height: 120px; order: -1; }
-      .entries li { grid-template-columns: 1fr; gap: 2px; }
-      nav ul { gap: 14px; }
-      .example { padding: 18px 16px; }
-      .ex-row { grid-template-columns: 1.8em 1.4em 1fr; }
+    /* Pull quote for the research question */
+    .question {
+      font-size: clamp(1.35rem, 2.2vw, 1.6rem); line-height: 1.4; font-style: italic;
+      border-left: 3px solid var(--pen); padding: 2px 0 2px 22px; margin: 0 0 30px; max-width: 46ch;
     }
-    @media print { nav { display: none; } }
+
+    footer { border-top: 1px solid var(--rule); padding: 32px 0 56px; font-family: var(--ui); font-size: .82rem; color: var(--muted); }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+
+    /* ============ Responsive ============ */
+    @media (max-width: 1000px) {
+      .hero { grid-template-columns: 1fr; }
+      .lede { max-width: 48ch; }
+      .row { grid-template-columns: 1fr; gap: 22px; }
+      .langs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .twocol { grid-template-columns: 1fr; }
+      .twocol .entries + .entries > li:first-child { border-top: 1px solid var(--rule); }
+    }
+    @media (max-width: 560px) {
+      body { font-size: 1.08rem; }
+      .portrait { width: 72px; height: 72px; }
+      .entries > li { grid-template-columns: 1fr; gap: 2px; }
+      .seg { width: 100%; }
+      .seg label { flex: 1; text-align: center; padding: 6px 4px; }
+      nav ul { gap: 18px; }
+      #fieldsvg text { font-size: 21px; }
+    }
+    @media print { nav, .field { display: none; } .hero { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -154,210 +246,343 @@
 </nav>
 
 <main id="top">
-  <header class="wrap">
-    <div class="intro">
-      <div>
-        <h1>Vixy Rivera
-          <span class="pron" title="Broad phonemic transcription">/ˈvɪk.si ɹɪˈvɛ.ɹə/</span>
-        </h1>
-        <!-- EDIT: add your university once you are ready, e.g. "M.A. student in Linguistics, University of ___" -->
-        <p class="role">Graduate student in linguistics · pragmatics &amp; sociolinguistics</p>
-        <div class="links">
-          <a href="mailto:vixyryanrivera@gmail.com">Email</a>
-          <a href="cv.pdf">CV (PDF)</a>
-          <!-- EDIT: uncomment and fill these in when you have them
-          <a href="https://orcid.org/0000-0000-0000-0000">ORCID</a>
-          <a href="https://scholar.google.com/citations?user=XXXX">Google Scholar</a>
-          <a href="https://github.com/YOUR-USERNAME">GitHub</a>
-          -->
+  <!-- ================= Hero ================= -->
+  <header class="wrap hero">
+    <div>
+      <div class="who">
+        <img class="portrait" src="portrait.jpg" alt="Portrait of Vixy Rivera">
+        <h1>Vixy Rivera</h1>
+        <div class="pron" title="Broad phonemic transcription"><span class="slash">/</span>ˈvɪk.si ɹɪˈvɛ.ɹə<span class="slash">/</span></div>
+      </div>
+      <!-- EDIT: add your program, e.g. "M.A. student in Linguistics at the University of ___." -->
+      <p class="lede">Graduate student in linguistics. I study how saying the same thing another way changes who you sound like.</p>
+      <div class="links">
+        <a class="btn primary" href="mailto:vixyryanrivera@gmail.com">Email me</a>
+        <a class="btn" href="cv.pdf">Read my CV</a>
+        <!-- EDIT: uncomment when you have these
+        <a class="btn" href="https://orcid.org/0000-0000-0000-0000">ORCID</a>
+        <a class="btn" href="https://scholar.google.com/citations?user=XXXX">Google Scholar</a>
+        -->
+      </div>
+    </div>
+
+    <figure class="field" aria-labelledby="field-title" style="margin:0">
+      <div class="field-head">
+        <p class="field-title" id="field-title">One request, three registers</p>
+        <div class="seg" role="radiogroup" aria-label="Choose a register">
+          <input type="radio" name="reg" id="r-plain" value="plain"><label for="r-plain">Plain</label>
+          <input type="radio" name="reg" id="r-hedged" value="hedged"><label for="r-hedged">Hedged</label>
+          <input type="radio" name="reg" id="r-circ" value="circ" checked><label for="r-circ">Circumlocutory</label>
         </div>
       </div>
-      <img class="portrait" src="images/portrait.jpg" alt="Portrait of Vixy Rivera">
-    </div>
 
-    <!-- A numbered example in the style of a linguistics handout -->
-    <div class="example" aria-label="Example: two ways of making the same request">
-      <div class="ex-row"><span class="ex-num">(1)</span><span>a.</span><span>Pass the salt.</span></div>
-      <div class="ex-row"><span class="ex-gloss"><span class="idx">⇝</span> direct, familiar, efficient</span></div>
-      <div class="ex-row"><span></span><span>b.</span><span>Would you mind passing the salt, if it’s no trouble?</span></div>
-      <div class="ex-row"><span class="ex-gloss"><span class="idx">⇝</span> deferential, careful, distant — or, said a certain way, exasperated</span></div>
-      <p class="ex-note">Same request, different person. I study what speakers do when they say the same thing another way, and what those choices tell listeners about who they are.</p>
-    </div>
+      <div class="utterance" aria-live="polite"><span class="exnum" id="exnum">(1c)</span><span id="utt"></span></div>
+      <p class="prop">Propositional content, unchanged: <code>request(hearer, pass(salt))</code></p>
+
+      <svg id="fieldsvg" viewBox="0 0 640 330" role="img" aria-label="Indexical field: qualities the chosen wording can signal">
+        <g id="edges"></g><g id="nodes"></g>
+      </svg>
+      <div class="legend" aria-hidden="true">
+        <span class="l-on">indexed here</span>
+        <span class="l-maybe">available with the right delivery</span>
+        <span class="l-off">elsewhere in the field</span>
+      </div>
+      <figcaption class="field-cite">An indexical field, after Eckert (2008): a constellation of related meanings, any of which a form can call up in context.</figcaption>
+    </figure>
   </header>
 
-  <section id="about" class="wrap" aria-labelledby="about-h">
-    <h2 id="about-h"><span class="num">§1</span>About</h2>
-    <p>I am a graduate student in linguistics working at the interface of <strong>pragmatics</strong> and <strong>sociolinguistics</strong>. My work asks how social meaning gets made in the gap between what is said and how it is said: why a speaker chooses a roundabout phrasing over a plain one, a formal register over a casual one, and how listeners read those choices as signs of stance, persona, and relationship.</p>
-    <p>I hold a B.A. in Linguistics from Stony Brook University, where I also served as a teaching assistant and research assistant, and I studied linguistics at Korea University in Seoul. In 2026 I completed the Michigan Humanities Emerging Research Scholars Program (MICHHERS) at the University of Michigan’s Rackham Graduate School.</p>
+  <!-- ================= About ================= -->
+  <section id="about" aria-labelledby="about-h">
+    <div class="wrap row">
+      <h2 id="about-h">About<span class="h2-pron">/əˈbaʊt/</span></h2>
+      <div class="prose">
+        <p>I am a graduate student in linguistics working at the interface of pragmatics and sociolinguistics. My work asks how social meaning is made in the gap between what is said and how it is said. Why does a speaker choose a roundabout phrasing over a plain one, or a formal register over a casual one, and how do listeners read those choices as signs of stance, persona, and relationship?</p>
+        <p>I hold a B.A. in Linguistics from Stony Brook University, where I worked as a teaching assistant and research assistant, and I studied linguistics at Korea University in Seoul. In 2026 I completed the Michigan Humanities Emerging Research Scholars Program (MICHHERS) at the University of Michigan’s Rackham Graduate School.</p>
+      </div>
+    </div>
   </section>
 
-  <section id="research" class="wrap" aria-labelledby="research-h">
-    <h2 id="research-h"><span class="num">§2</span>Research</h2>
-    <ul class="tags" aria-label="Research areas">
-      <li>Social meaning</li>
-      <li>Indexicality</li>
-      <li>Third-wave variation</li>
-      <li>Register &amp; style</li>
-      <li>Politeness &amp; stance</li>
-      <li>Intralingual translation</li>
-    </ul>
+  <!-- ================= Research ================= -->
+  <section id="research" aria-labelledby="research-h">
+    <div class="wrap row">
+      <h2 id="research-h">Research<span class="h2-pron">/ˈɹi.sɝtʃ/</span></h2>
+      <div>
+        <ul class="areas" aria-label="Research areas">
+          <li>Social meaning</li>
+          <li>Indexicality</li>
+          <li>Third-wave variation</li>
+          <li>Register and style</li>
+          <li>Politeness and stance</li>
+          <li>Intralingual translation</li>
+        </ul>
 
-    <h3>Current project: Intralingual translation and social meaning</h3>
-    <p>When speakers rephrase something within the same language (moving up or down in register, or talking around a word instead of using it), the propositional content can stay nearly constant while the social content changes sharply. My thesis treats these rewordings as a natural experiment. Working within third-wave variationist sociolinguistics and theories of indexicality, I examine how <em>register shift</em> and <em>circumlocution</em> come to signal interpersonal and social qualities such as politeness, intimacy, authority, and evasiveness.</p>
-    <p>More broadly I am interested in how pragmatic inference and indexical meaning interact: how speakers draw on shared expectations about what is normally said, and how departures from those expectations become resources for constructing identity.</p>
+        <p class="question">When the proposition holds still and only the wording moves, what exactly has changed?</p>
 
-    <h3 style="margin-top:28px">Presentations</h3>
-    <ul class="entries">
-      <li>
-        <span class="when">June 2026</span>
-        <div>
-          <div>Research proposal (≈30 min)</div>
-          <div class="where">Faculty of the Department of Linguistics, University of Michigan, Ann Arbor</div>
+        <div class="prose">
+          <h3 class="sub">Intralingual translation and social meaning</h3>
+          <p>When speakers rephrase something within the same language, moving up or down in register or talking around a word instead of using it, the propositional content can stay nearly constant while the social content shifts sharply. My thesis treats these rewordings as a natural experiment. Working within third-wave variationist sociolinguistics and theories of indexicality, I examine how <em>register shift</em> and <em>circumlocution</em> come to signal interpersonal and social qualities such as politeness, intimacy, authority, and evasiveness.</p>
+          <p>More broadly, I am interested in how pragmatic inference and indexical meaning interact: how speakers draw on shared expectations about what is normally said, and how departures from those expectations become resources for constructing identity.</p>
         </div>
-      </li>
-      <li>
-        <span class="when">June 2026</span>
-        <div>
-          <div>Three-minute research overview</div>
-          <div class="where">MICHHERS cohort, faculty mentors, and Rackham Graduate School staff, University of Michigan</div>
-        </div>
-      </li>
-    </ul>
+
+        <h3 class="sub" style="margin-top:36px">Presentations</h3>
+        <ul class="entries">
+          <li>
+            <span class="when">June 2026</span>
+            <div>
+              <h3>Research proposal, about 30 minutes</h3>
+              <div class="where">Faculty of the Department of Linguistics, University of Michigan, Ann Arbor</div>
+            </div>
+          </li>
+          <li>
+            <span class="when">June 2026</span>
+            <div>
+              <h3>Three-minute research overview</h3>
+              <div class="where">MICHHERS cohort, faculty mentors, and Rackham Graduate School staff, University of Michigan</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </section>
 
-  <section id="experience" class="wrap" aria-labelledby="experience-h">
-    <h2 id="experience-h"><span class="num">§3</span>Research experience</h2>
-    <ul class="entries">
-      <li>
-        <span class="when">May–June 2026</span>
-        <div>
-          <h3>Michigan Humanities Emerging Research Scholars Program</h3>
-          <div class="where">Rackham Graduate School, University of Michigan</div>
-          <div class="detail">Selective pre-doctoral humanities research program with faculty and graduate-student mentorship.</div>
-        </div>
-      </li>
-      <li>
-        <span class="when">Spring 2026</span>
-        <div>
-          <h3>Modelling Shifty Hierarchies in Formal Theory (SHIFT)</h3>
-          <div class="where">Research Assistant · PI Sandhya Sundaresan; Co-PIs Thomas McFadden &amp; Owen Rambow · Stony Brook University</div>
-        </div>
-      </li>
-      <li>
-        <span class="when">Spring 2026</span>
-        <div>
-          <h3>Semantic Rule Survey</h3>
-          <div class="where">Research Assistant · Richard Larson · Stony Brook University</div>
-        </div>
-      </li>
-      <li>
-        <span class="when">Spring 2026</span>
-        <div>
-          <h3>Acoustic Project</h3>
-          <div class="where">Research Assistant · Lori Repetti &amp; Elnaz Azimi · Stony Brook University</div>
-        </div>
-      </li>
-      <li>
-        <span class="when">Spring 2026</span>
-        <div>
-          <h3>Stony Brook Stories</h3>
-          <div class="where">Research Assistant · Joy Janzen · Stony Brook University</div>
-        </div>
-      </li>
-    </ul>
+  <!-- ================= Experience ================= -->
+  <section id="experience" aria-labelledby="experience-h">
+    <div class="wrap row">
+      <h2 id="experience-h">Research experience<span class="h2-pron">/ɪkˈspɪɹ.i.əns/</span></h2>
+      <div class="twocol">
+        <ul class="entries">
+          <li>
+            <span class="when">May–June 2026</span>
+            <div>
+              <h3>Michigan Humanities Emerging Research Scholars Program</h3>
+              <div class="where">Rackham Graduate School, University of Michigan</div>
+              <div class="detail">Selective pre-doctoral humanities research program with faculty and graduate-student mentorship.</div>
+            </div>
+          </li>
+          <li>
+            <span class="when">Spring 2026</span>
+            <div>
+              <h3>Modelling Shifty Hierarchies in Formal Theory (SHIFT)</h3>
+              <div class="where">Research assistant to Sandhya Sundaresan, with Thomas McFadden and Owen Rambow, Stony Brook University</div>
+            </div>
+          </li>
+          <li>
+            <span class="when">Spring 2026</span>
+            <div>
+              <h3>Semantic Rule Survey</h3>
+              <div class="where">Research assistant to Richard Larson, Stony Brook University</div>
+            </div>
+          </li>
+        </ul>
+        <ul class="entries">
+          <li>
+            <span class="when">Spring 2026</span>
+            <div>
+              <h3>Acoustic Project</h3>
+              <div class="where">Research assistant to Lori Repetti and Elnaz Azimi, Stony Brook University</div>
+            </div>
+          </li>
+          <li>
+            <span class="when">Spring 2026</span>
+            <div>
+              <h3>Stony Brook Stories</h3>
+              <div class="where">Research assistant to Joy Janzen, Stony Brook University</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </section>
 
-  <section id="teaching" class="wrap" aria-labelledby="teaching-h">
-    <h2 id="teaching-h"><span class="num">§4</span>Teaching</h2>
-    <ul class="entries">
-      <li>
-        <span class="when">Fall 2025</span>
-        <div>
-          <h3>Human Language</h3>
-          <div class="where">Teaching Assistant · Stony Brook University · 99 students</div>
-          <div class="detail">Designed and led in-lecture activities, held weekly office hours, and maintained the course site and materials.</div>
-        </div>
-      </li>
-      <li>
-        <span class="when">Spring &amp; Fall 2025</span>
-        <div>
-          <h3>The Anatomy of English Words</h3>
-          <div class="where">Teaching Assistant · Stony Brook University · 359 students</div>
-          <div class="detail">Wrote examination questions reviewed weekly with the supervising professor; graded assignments and discussion boards; supported students academically and technically.</div>
-        </div>
-      </li>
-    </ul>
+  <!-- ================= Teaching ================= -->
+  <section id="teaching" aria-labelledby="teaching-h">
+    <div class="wrap row">
+      <h2 id="teaching-h">Teaching<span class="h2-pron">/ˈti.tʃɪŋ/</span></h2>
+      <ul class="entries">
+        <li>
+          <span class="when">Fall 2025</span>
+          <div>
+            <h3>Human Language</h3>
+            <div class="where">Teaching assistant, Stony Brook University, 99 students</div>
+            <div class="detail">Designed and led in-lecture activities, held weekly office hours, and maintained the course site and materials.</div>
+          </div>
+        </li>
+        <li>
+          <span class="when">Spring and Fall 2025</span>
+          <div>
+            <h3>The Anatomy of English Words</h3>
+            <div class="where">Teaching assistant, Stony Brook University, 359 students</div>
+            <div class="detail">Wrote examination questions reviewed weekly with the supervising professor, graded assignments and discussion boards, and supported students academically and technically.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </section>
 
-  <section id="education" class="wrap" aria-labelledby="education-h">
-    <h2 id="education-h"><span class="num">§5</span>Education</h2>
-    <ul class="entries">
-      <!-- EDIT: add your current M.A. program here as the first entry, e.g.
-      <li>
-        <span class="when">2026–</span>
-        <div>
-          <h3>M.A. in Linguistics</h3>
-          <div class="where">University of ___</div>
-        </div>
-      </li>
-      -->
-      <li>
-        <span class="when">2026</span>
-        <div>
-          <h3>B.A. in Linguistics</h3>
-          <div class="where">Stony Brook University</div>
-          <div class="detail">Coursework in semantics, pragmatics, sociolinguistics, phonetics, computational linguistics, language acquisition, and mathematical methods in linguistics, plus Calculus I–IV and linear algebra.</div>
-        </div>
-      </li>
-      <li>
-        <span class="when">Mar–June 2025</span>
-        <div>
-          <h3>Study abroad</h3>
-          <div class="where">Korea University, Seoul</div>
-          <div class="detail">Syntax, phonology, language acquisition, and applied linguistic theory.</div>
-        </div>
-      </li>
-    </ul>
+  <!-- ================= Education ================= -->
+  <section id="education" aria-labelledby="education-h">
+    <div class="wrap row">
+      <h2 id="education-h">Education<span class="h2-pron">/ˌɛd͡ʒ.əˈkeɪ.ʃən/</span></h2>
+      <div>
+        <ul class="entries">
+          <!-- EDIT: add your current M.A. program as the first entry, e.g.
+          <li>
+            <span class="when">2026–</span>
+            <div>
+              <h3>M.A. in Linguistics</h3>
+              <div class="where">University of ___</div>
+            </div>
+          </li>
+          -->
+          <li>
+            <span class="when">2026</span>
+            <div>
+              <h3>B.A. in Linguistics</h3>
+              <div class="where">Stony Brook University</div>
+              <div class="detail">Coursework in semantics, pragmatics, sociolinguistics, phonetics, computational linguistics, language acquisition, and mathematical methods in linguistics, along with Calculus I–IV and linear algebra.</div>
+            </div>
+          </li>
+          <li>
+            <span class="when">Mar–June 2025</span>
+            <div>
+              <h3>Study abroad</h3>
+              <div class="where">Korea University, Seoul</div>
+              <div class="detail">Syntax, phonology, language acquisition, and applied linguistic theory.</div>
+            </div>
+          </li>
+        </ul>
 
-    <h3 style="margin-top:28px">Honors</h3>
-    <ul class="entries">
-      <li>
-        <span class="when">Spring 2026</span>
-        <div>Recognition of Outstanding Scholarship and Service</div>
-      </li>
-      <li>
-        <span class="when">2026</span>
-        <div>Certificate of Achievement, Michigan Humanities Emerging Research Scholars Program</div>
-      </li>
-    </ul>
+        <h3 class="sub" style="margin-top:36px">Honors</h3>
+        <ul class="entries">
+          <li><span class="when">Spring 2026</span><div><h3 style="font-weight:400">Recognition of Outstanding Scholarship and Service</h3></div></li>
+          <li><span class="when">2026</span><div><h3 style="font-weight:400">Certificate of Achievement, Michigan Humanities Emerging Research Scholars Program</h3></div></li>
+        </ul>
+      </div>
+    </div>
   </section>
 
-  <section id="languages" class="wrap" aria-labelledby="languages-h">
-    <h2 id="languages-h"><span class="num">§6</span>Languages &amp; tools</h2>
-    <ul class="langs">
-      <li><span class="endonym">English</span><span class="level">Native</span></li>
-      <li><span class="endonym">한국어</span><span class="level">Korean · limited working</span></li>
-      <li><span class="endonym">Español</span><span class="level">Spanish · limited working</span></li>
-      <li><span class="endonym">日本語</span><span class="level">Japanese · elementary</span></li>
-    </ul>
-    <p style="margin-top:18px; font-size:.97rem; color:var(--muted)">Python and Java for analysis and modelling; quantitative and statistical methods; web design (I also built and maintain an academic website for Prof. Mark Aronoff).</p>
+  <!-- ================= Languages ================= -->
+  <section id="languages" aria-labelledby="languages-h">
+    <div class="wrap row">
+      <h2 id="languages-h">Languages and tools<span class="h2-pron">/ˈlæŋ.ɡwɪ.d͡ʒəz/</span></h2>
+      <div>
+        <ul class="langs">
+          <li><span class="endonym">English</span><span class="level">Native</span></li>
+          <li><span class="endonym">한국어</span><span class="level">Korean, limited working</span></li>
+          <li><span class="endonym">Español</span><span class="level">Spanish, limited working</span></li>
+          <li><span class="endonym">日本語</span><span class="level">Japanese, elementary</span></li>
+        </ul>
+        <p class="prose">Python and Java for analysis and modelling, quantitative and statistical methods, and web design. I also built and maintain an academic website for Prof. Mark Aronoff.</p>
+      </div>
+    </div>
   </section>
 
-  <section id="contact" class="wrap" aria-labelledby="contact-h">
-    <h2 id="contact-h"><span class="num">§7</span>Contact</h2>
-    <p>The best way to reach me is by email at <a href="mailto:vixyryanrivera@gmail.com">vixyryanrivera@gmail.com</a>. I am always glad to talk about social meaning, register, and the many ways of saying the same thing.</p>
+  <!-- ================= Contact ================= -->
+  <section id="contact" aria-labelledby="contact-h">
+    <div class="wrap row">
+      <h2 id="contact-h">Contact<span class="h2-pron">/ˈkɑn.tækt/</span></h2>
+      <p class="prose">Email is the best way to reach me: <a href="mailto:vixyryanrivera@gmail.com">vixyryanrivera@gmail.com</a>. I am always glad to talk about social meaning, register, and the many ways of saying the same thing.</p>
+    </div>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <p>© <span id="year">2026</span> Vixy Rivera · Hosted on GitHub Pages</p>
-    <p>Notation: <span class="ipa">⇝</span> = “indexes” (can be heard as signalling).</p>
+    <span>© <span id="year">2026</span> Vixy Rivera</span>
+    <span>Transcriptions are broad and phonemic, General American.</span>
   </div>
 </footer>
 
 <script>
+(function () {
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- The field: qualities and their positions (viewBox 640 x 330) ----
+  var nodes = {
+    direct:      [60, 70],
+    efficient:   [175, 30],
+    brusque:     [70, 250],
+    familiar:    [175, 150],
+    casual:      [290, 75],
+    friendly:    [280, 215],
+    considerate: [365, 150],
+    polite:      [420, 265],
+    careful:     [425, 40],
+    deferential: [505, 160],
+    formal:      [590, 270],
+    distant:     [600, 60],
+    exasperated: [300, 315]
+  };
+  var edges = [
+    ['direct','efficient'], ['direct','brusque'], ['direct','familiar'],
+    ['efficient','casual'], ['familiar','casual'], ['familiar','friendly'],
+    ['casual','friendly'], ['friendly','considerate'], ['considerate','polite'],
+    ['considerate','careful'], ['careful','deferential'], ['polite','deferential'],
+    ['polite','formal'], ['deferential','distant'], ['deferential','formal'],
+    ['careful','distant'], ['brusque','exasperated'], ['exasperated','polite']
+  ];
+
+  // ---- The three registers ----
+  var registers = {
+    plain:  { num: '(1a)', html: 'Pass the salt.',
+              on: ['direct','efficient','familiar','casual'], maybe: ['brusque'] },
+    hedged: { num: '(1b)', html: '<mark>Could you</mark> pass the salt?',
+              on: ['friendly','considerate','polite','casual'], maybe: [] },
+    circ:   { num: '(1c)', html: '<mark>Would you mind</mark> passing the salt, <mark>if it’s no trouble</mark>?',
+              on: ['careful','deferential','formal','distant','polite'], maybe: ['exasperated'] }
+  };
+
+  var NS = 'http://www.w3.org/2000/svg';
+  var gE = document.getElementById('edges'), gN = document.getElementById('nodes');
+  var edgeEls = [], nodeEls = {};
+
+  edges.forEach(function (e) {
+    var a = nodes[e[0]], b = nodes[e[1]];
+    var l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', a[0]); l.setAttribute('y1', a[1]);
+    l.setAttribute('x2', b[0]); l.setAttribute('y2', b[1]);
+    l.setAttribute('class', 'edge');
+    gE.appendChild(l); edgeEls.push([l, e[0], e[1]]);
+  });
+
+  Object.keys(nodes).forEach(function (k) {
+    var p = nodes[k], g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'node');
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', p[0]); c.setAttribute('cy', p[1]); c.setAttribute('r', 6); c.setAttribute('class', 'dot');
+    var t = document.createElementNS(NS, 'text');
+    // Keep labels inside the frame: right-hand nodes label to the left
+    var right = p[0] > 560;
+    t.setAttribute('x', right ? p[0] - 12 : p[0] + 12);
+    t.setAttribute('y', p[1] + 5);
+    t.setAttribute('text-anchor', right ? 'end' : 'start');
+    t.textContent = k;
+    g.appendChild(c); g.appendChild(t); gN.appendChild(g); nodeEls[k] = g;
+  });
+
+  function show(key) {
+    var r = registers[key];
+    document.getElementById('utt').innerHTML = r.html;
+    document.getElementById('exnum').textContent = r.num;
+    var state = {};
+    r.on.forEach(function (k) { state[k] = 'on'; });
+    r.maybe.forEach(function (k) { state[k] = 'maybe'; });
+    Object.keys(nodeEls).forEach(function (k) {
+      nodeEls[k].setAttribute('class', 'node' + (state[k] ? ' ' + state[k] : ''));
+    });
+    edgeEls.forEach(function (e) {
+      var s1 = state[e[1]], s2 = state[e[2]], cls = 'edge';
+      if (s1 === 'on' && s2 === 'on') cls += ' on';
+      else if (s1 && s2) cls += ' maybe';
+      e[0].setAttribute('class', cls);
+    });
+  }
+
+  document.querySelectorAll('input[name="reg"]').forEach(function (inp) {
+    inp.addEventListener('change', function () { show(inp.value); });
+  });
+  show('circ');
+})();
 </script>
 </body>
 </html>
