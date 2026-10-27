@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vixy Rivera · Linguistics</title>
+  <meta name="description" content="Vixy Rivera — graduate student in linguistics working at the interface of pragmatics and sociolinguistics: social meaning, indexicality, register shift, and intralingual translation.">
+  <meta name="author" content="Vixy Rivera">
+  <meta property="og:title" content="Vixy Rivera · Linguistics">
+  <meta property="og:description" content="Pragmatics, sociolinguistics, and the social meaning of saying things differently.">
+  <meta property="og:image" content="images/portrait.jpg">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---------- Colour tokens (light / dark) ---------- */
+    :root {
+      --paper: #f7f5f0;
+      --ink: #1d1d1b;
+      --muted: #64625c;
+      --rule: #dcd8ce;
+      --accent: #1f5c5f;      /* deep teal */
+      --accent-soft: #e4ecea;
+      --mark: #8a3b2e;        /* oxblood, for the “indexes” arrow */
+      --serif: "Source Serif 4", Georgia, serif;
+      --ipa: "Gentium Book Plus", "Charis SIL", "Doulos SIL", "Noto Serif", serif;
+      --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #161816;
+        --ink: #e8e5dd;
+        --muted: #9d9a91;
+        --rule: #33352f;
+        --accent: #7fb7b2;
+        --accent-soft: #1f2a28;
+        --mark: #d98b78;
+      }
+    }
+
+    /* ---------- Base ---------- */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 1.08rem;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+    .ipa { font-family: var(--ipa); }
+    .sc { font-variant: small-caps; letter-spacing: .03em; }
+
+    /* ---------- Nav ---------- */
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--paper) 92%, transparent);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--rule);
+    }
+    nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 52px; gap: 16px; }
+    nav .home { font-family: var(--ipa); color: var(--ink); text-decoration: none; font-size: 1.05rem; white-space: nowrap; }
+    nav ul { list-style: none; display: flex; gap: 18px; margin: 0; padding: 0; overflow-x: auto; }
+    nav ul a { font-family: var(--sans); font-size: .85rem; color: var(--muted); text-decoration: none; white-space: nowrap; }
+    nav ul a:hover { color: var(--ink); }
+
+    /* ---------- Header ---------- */
+    header { padding: 64px 0 40px; }
+    .intro { display: grid; grid-template-columns: 1fr 180px; gap: 36px; align-items: center; }
+    h1 { font-weight: 600; font-size: clamp(2.1rem, 6vw, 2.9rem); line-height: 1.1; margin: 0; letter-spacing: -.01em; }
+    .pron {
+      display: block; margin-top: 10px;
+      font-family: var(--ipa); font-size: 1.25rem; color: var(--muted); font-weight: 400;
+    }
+    .role { font-family: var(--sans); font-size: .95rem; color: var(--muted); margin: 18px 0 0; line-height: 1.5; }
+    .portrait { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; object-position: 50% 35%; border: 1px solid var(--rule); }
+    .links { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--sans); font-size: .9rem; }
+
+    /* ---------- Linguistic example block ---------- */
+    .example {
+      margin: 36px 0 0; padding: 22px 24px;
+      background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 2px;
+      font-family: var(--ipa); font-size: 1.08rem; line-height: 1.55;
+    }
+    .ex-row { display: grid; grid-template-columns: 2.2em 1.6em 1fr; }
+    .ex-num { color: var(--muted); }
+    .ex-gloss { grid-column: 3; color: var(--muted); font-size: .95rem; margin-bottom: 6px; }
+    .ex-gloss .idx { color: var(--mark); }
+    .ex-note { margin: 14px 0 0; font-family: var(--serif); font-size: .95rem; color: var(--muted); }
+
+    /* ---------- Sections ---------- */
+    section { padding: 40px 0 8px; border-top: 1px solid var(--rule); }
+    h2 {
+      font-family: var(--sans); font-weight: 500; font-size: .82rem;
+      text-transform: uppercase; letter-spacing: .14em; color: var(--muted);
+      margin: 0 0 22px;
+    }
+    h2 .num { font-family: var(--ipa); text-transform: none; letter-spacing: 0; color: var(--accent); margin-right: 8px; font-size: 1rem; }
+    h3 { font-size: 1.12rem; font-weight: 600; margin: 0; }
+    p { margin: 0 0 1em; }
+
+    .entries { list-style: none; margin: 0; padding: 0; }
+    .entries li { display: grid; grid-template-columns: 150px 1fr; gap: 20px; padding: 12px 0; }
+    .entries li + li { border-top: 1px dashed var(--rule); }
+    .when { font-family: var(--sans); font-size: .85rem; color: var(--muted); padding-top: 3px; }
+    .where { color: var(--muted); font-size: .97rem; }
+    .detail { font-size: .97rem; margin-top: 4px; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 22px; padding: 0; list-style: none; }
+    .tags li { font-family: var(--sans); font-size: .82rem; padding: 4px 11px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink); }
+
+    .langs { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+    .langs li { border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; }
+    .langs .endonym { font-family: var(--ipa); font-size: 1.15rem; display: block; }
+    .langs .level { font-family: var(--sans); font-size: .8rem; color: var(--muted); }
+
+    footer { border-top: 1px solid var(--rule); margin-top: 48px; padding: 28px 0 48px; font-family: var(--sans); font-size: .82rem; color: var(--muted); }
+    footer p { margin: 0 0 6px; }
+
+    /* ---------- Small screens ---------- */
+    @media (max-width: 640px) {
+      header { padding: 40px 0 28px; }
+      .intro { grid-template-columns: 1fr; gap: 22px; }
+      .portrait { width: 120px; height: 120px; order: -1; }
+      .entries li { grid-template-columns: 1fr; gap: 2px; }
+      nav ul { gap: 14px; }
+      .example { padding: 18px 16px; }
+      .ex-row { grid-template-columns: 1.8em 1.4em 1fr; }
+    }
+    @media print { nav { display: none; } }
+  </style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a class="home" href="#top">/ˈvɪk.si/</a>
+    <ul>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#teaching">Teaching</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="cv.pdf">CV</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="top">
+  <header class="wrap">
+    <div class="intro">
+      <div>
+        <h1>Vixy Rivera
+          <span class="pron" title="Broad phonemic transcription">/ˈvɪk.si ɹɪˈvɛ.ɹə/</span>
+        </h1>
+        <!-- EDIT: add your university once you are ready, e.g. "M.A. student in Linguistics, University of ___" -->
+        <p class="role">Graduate student in linguistics · pragmatics &amp; sociolinguistics</p>
+        <div class="links">
+          <a href="mailto:vixyryanrivera@gmail.com">Email</a>
+          <a href="cv.pdf">CV (PDF)</a>
+          <!-- EDIT: uncomment and fill these in when you have them
+          <a href="https://orcid.org/0000-0000-0000-0000">ORCID</a>
+          <a href="https://scholar.google.com/citations?user=XXXX">Google Scholar</a>
+          <a href="https://github.com/YOUR-USERNAME">GitHub</a>
+          -->
+        </div>
+      </div>
+      <img class="portrait" src="images/portrait.jpg" alt="Portrait of Vixy Rivera">
+    </div>
+
+    <!-- A numbered example in the style of a linguistics handout -->
+    <div class="example" aria-label="Example: two ways of making the same request">
+      <div class="ex-row"><span class="ex-num">(1)</span><span>a.</span><span>Pass the salt.</span></div>
+      <div class="ex-row"><span class="ex-gloss"><span class="idx">⇝</span> direct, familiar, efficient</span></div>
+      <div class="ex-row"><span></span><span>b.</span><span>Would you mind passing the salt, if it’s no trouble?</span></div>
+      <div class="ex-row"><span class="ex-gloss"><span class="idx">⇝</span> deferential, careful, distant — or, said a certain way, exasperated</span></div>
+      <p class="ex-note">Same request, different person. I study what speakers do when they say the same thing another way, and what those choices tell listeners about who they are.</p>
+    </div>
+  </header>
+
+  <section id="about" class="wrap" aria-labelledby="about-h">
+    <h2 id="about-h"><span class="num">§1</span>About</h2>
+    <p>I am a graduate student in linguistics working at the interface of <strong>pragmatics</strong> and <strong>sociolinguistics</strong>. My work asks how social meaning gets made in the gap between what is said and how it is said: why a speaker chooses a roundabout phrasing over a plain one, a formal register over a casual one, and how listeners read those choices as signs of stance, persona, and relationship.</p>
+    <p>I hold a B.A. in Linguistics from Stony Brook University, where I also served as a teaching assistant and research assistant, and I studied linguistics at Korea University in Seoul. In 2026 I completed the Michigan Humanities Emerging Research Scholars Program (MICHHERS) at the University of Michigan’s Rackham Graduate School.</p>
+  </section>
+
+  <section id="research" class="wrap" aria-labelledby="research-h">
+    <h2 id="research-h"><span class="num">§2</span>Research</h2>
+    <ul class="tags" aria-label="Research areas">
+      <li>Social meaning</li>
+      <li>Indexicality</li>
+      <li>Third-wave variation</li>
+      <li>Register &amp; style</li>
+      <li>Politeness &amp; stance</li>
+      <li>Intralingual translation</li>
+    </ul>
+
+    <h3>Current project: Intralingual translation and social meaning</h3>
+    <p>When speakers rephrase something within the same language (moving up or down in register, or talking around a word instead of using it), the propositional content can stay nearly constant while the social content changes sharply. My thesis treats these rewordings as a natural experiment. Working within third-wave variationist sociolinguistics and theories of indexicality, I examine how <em>register shift</em> and <em>circumlocution</em> come to signal interpersonal and social qualities such as politeness, intimacy, authority, and evasiveness.</p>
+    <p>More broadly I am interested in how pragmatic inference and indexical meaning interact: how speakers draw on shared expectations about what is normally said, and how departures from those expectations become resources for constructing identity.</p>
+
+    <h3 style="margin-top:28px">Presentations</h3>
+    <ul class="entries">
+      <li>
+        <span class="when">June 2026</span>
+        <div>
+          <div>Research proposal (≈30 min)</div>
+          <div class="where">Faculty of the Department of Linguistics, University of Michigan, Ann Arbor</div>
+        </div>
+      </li>
+      <li>
+        <span class="when">June 2026</span>
+        <div>
+          <div>Three-minute research overview</div>
+          <div class="where">MICHHERS cohort, faculty mentors, and Rackham Graduate School staff, University of Michigan</div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section id="experience" class="wrap" aria-labelledby="experience-h">
+    <h2 id="experience-h"><span class="num">§3</span>Research experience</h2>
+    <ul class="entries">
+      <li>
+        <span class="when">May–June 2026</span>
+        <div>
+          <h3>Michigan Humanities Emerging Research Scholars Program</h3>
+          <div class="where">Rackham Graduate School, University of Michigan</div>
+          <div class="detail">Selective pre-doctoral humanities research program with faculty and graduate-student mentorship.</div>
+        </div>
+      </li>
+      <li>
+        <span class="when">Spring 2026</span>
+        <div>
+          <h3>Modelling Shifty Hierarchies in Formal Theory (SHIFT)</h3>
+          <div class="where">Research Assistant · PI Sandhya Sundaresan; Co-PIs Thomas McFadden &amp; Owen Rambow · Stony Brook University</div>
+        </div>
+      </li>
+      <li>
+        <span class="when">Spring 2026</span>
+        <div>
+          <h3>Semantic Rule Survey</h3>
+          <div class="where">Research Assistant · Richard Larson · Stony Brook University</div>
+        </div>
+      </li>
+      <li>
+        <span class="when">Spring 2026</span>
+        <div>
+          <h3>Acoustic Project</h3>
+          <div class="where">Research Assistant · Lori Repetti &amp; Elnaz Azimi · Stony Brook University</div>
+        </div>
+      </li>
+      <li>
+        <span class="when">Spring 2026</span>
+        <div>
+          <h3>Stony Brook Stories</h3>
+          <div class="where">Research Assistant · Joy Janzen · Stony Brook University</div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section id="teaching" class="wrap" aria-labelledby="teaching-h">
+    <h2 id="teaching-h"><span class="num">§4</span>Teaching</h2>
+    <ul class="entries">
+      <li>
+        <span class="when">Fall 2025</span>
+        <div>
+          <h3>Human Language</h3>
+          <div class="where">Teaching Assistant · Stony Brook University · 99 students</div>
+          <div class="detail">Designed and led in-lecture activities, held weekly office hours, and maintained the course site and materials.</div>
+        </div>
+      </li>
+      <li>
+        <span class="when">Spring &amp; Fall 2025</span>
+        <div>
+          <h3>The Anatomy of English Words</h3>
+          <div class="where">Teaching Assistant · Stony Brook University · 359 students</div>
+          <div class="detail">Wrote examination questions reviewed weekly with the supervising professor; graded assignments and discussion boards; supported students academically and technically.</div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section id="education" class="wrap" aria-labelledby="education-h">
+    <h2 id="education-h"><span class="num">§5</span>Education</h2>
+    <ul class="entries">
+      <!-- EDIT: add your current M.A. program here as the first entry, e.g.
+      <li>
+        <span class="when">2026–</span>
+        <div>
+          <h3>M.A. in Linguistics</h3>
+          <div class="where">University of ___</div>
+        </div>
+      </li>
+      -->
+      <li>
+        <span class="when">2026</span>
+        <div>
+          <h3>B.A. in Linguistics</h3>
+          <div class="where">Stony Brook University</div>
+          <div class="detail">Coursework in semantics, pragmatics, sociolinguistics, phonetics, computational linguistics, language acquisition, and mathematical methods in linguistics, plus Calculus I–IV and linear algebra.</div>
+        </div>
+      </li>
+      <li>
+        <span class="when">Mar–June 2025</span>
+        <div>
+          <h3>Study abroad</h3>
+          <div class="where">Korea University, Seoul</div>
+          <div class="detail">Syntax, phonology, language acquisition, and applied linguistic theory.</div>
+        </div>
+      </li>
+    </ul>
+
+    <h3 style="margin-top:28px">Honors</h3>
+    <ul class="entries">
+      <li>
+        <span class="when">Spring 2026</span>
+        <div>Recognition of Outstanding Scholarship and Service</div>
+      </li>
+      <li>
+        <span class="when">2026</span>
+        <div>Certificate of Achievement, Michigan Humanities Emerging Research Scholars Program</div>
+      </li>
+    </ul>
+  </section>
+
+  <section id="languages" class="wrap" aria-labelledby="languages-h">
+    <h2 id="languages-h"><span class="num">§6</span>Languages &amp; tools</h2>
+    <ul class="langs">
+      <li><span class="endonym">English</span><span class="level">Native</span></li>
+      <li><span class="endonym">한국어</span><span class="level">Korean · limited working</span></li>
+      <li><span class="endonym">Español</span><span class="level">Spanish · limited working</span></li>
+      <li><span class="endonym">日本語</span><span class="level">Japanese · elementary</span></li>
+    </ul>
+    <p style="margin-top:18px; font-size:.97rem; color:var(--muted)">Python and Java for analysis and modelling; quantitative and statistical methods; web design (I also built and maintain an academic website for Prof. Mark Aronoff).</p>
+  </section>
+
+  <section id="contact" class="wrap" aria-labelledby="contact-h">
+    <h2 id="contact-h"><span class="num">§7</span>Contact</h2>
+    <p>The best way to reach me is by email at <a href="mailto:vixyryanrivera@gmail.com">vixyryanrivera@gmail.com</a>. I am always glad to talk about social meaning, register, and the many ways of saying the same thing.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© <span id="year">2026</span> Vixy Rivera · Hosted on GitHub Pages</p>
+    <p>Notation: <span class="ipa">⇝</span> = “indexes” (can be heard as signalling).</p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
